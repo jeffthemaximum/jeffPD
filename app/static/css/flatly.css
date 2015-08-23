@@ -7076,3 +7076,9 @@ div#gif {
   margin-bottom: 100px;
   margin-top: 50px;
 }
+
+div#gif img{
+  width: 100%;
+  height: 100%;
+  max-width: 600px;
+}

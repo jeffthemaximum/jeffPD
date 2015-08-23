@@ -21,19 +21,16 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-        'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
+    SQLALCHEMY_DATABASE_URI = 'postgres://uaaalnaflmsjnp:pLyQ5JRVbro0WCgXuMVorfqSjY@ec2-54-227-255-240.compute-1.amazonaws.com:5432/d8hosmtv1eijgp'
 
 
 class TestingConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-        'sqlite:///' + os.path.join(basedir, 'data-test.sqlite')
+    SQLALCHEMY_DATABASE_URI = 'postgres://uaaalnaflmsjnp:pLyQ5JRVbro0WCgXuMVorfqSjY@ec2-54-227-255-240.compute-1.amazonaws.com:5432/d8hosmtv1eijgp'
 
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-        'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+    SQLALCHEMY_DATABASE_URI = 'postgres://uaaalnaflmsjnp:pLyQ5JRVbro0WCgXuMVorfqSjY@ec2-54-227-255-240.compute-1.amazonaws.com:5432/d8hosmtv1eijgp'
 
 
 config = {

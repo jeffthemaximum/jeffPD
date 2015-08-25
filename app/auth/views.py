@@ -49,7 +49,7 @@ def register():
 def password_reset_request():
     form = PasswordResetForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = User.query.filter_by(email=form.email.data.lower()).first()
         if user:
             token = user.generate_reset_token()
             send_email(user.email, 'Reset Your Password',

@@ -5,6 +5,85 @@
 {% block page_content %}
 <div class="page-header">
     <h1>Hello, {% if current_user.is_authenticated() %}{{ current_user.first_name }}{% else %}Stranger{% endif %}!</h1>
-
+</div>
+<div class='container'>
+    <h4>By the end of this PD, you will:</h4>
+    <ul>
+        <li>Understand how Jeff Maxim is here to help you.</li>
+        <li>Login to your IAL Gmail account and send an email.</li>
+        <li>Learn about tech coaching at IAL.</li>
+        <li>Work on some bonus problemss!</li>
+    </ul>
+    <br>
+    <h4>How Jeff Maxim is here to help you</h4>
+    <p>Hey {{ current_user.first_name }}. Welcome to your first tech PD at IAL with Jeff Maxim for the 2015-2016 school year.</p>
+    <p>I'm here to help make your experience with technology at IAL better.</p>
+    <p>I've worked as a classroom teacher for 9 years, and I've been a classroom teacher at IAL for 3 years. That means I fully understand the successes and failures that we've had with technology at IAL in the past. I've complained about the printers being jammed, about the wifi being down. I've gotten mad when none of the student laptops are charged or working, and I've been frustrated when the students misbehave while using technology in the classroom. If you're a returning teacher,&nbsp;{{ current_user.first_name }}, I'm sure you can list many other frustrations that you've had with technology at IAL.</p>
+    <p>My hope is that we can solve as many of those problems as possible this year. I know there's many challenges, but I'm here to help.</p>
+    <p>My role is to coach you on how to use technology effectively in your teaching. This year, I will be helping you find fun, easy, effective, stress-free ways to use tech in your classroom with your students.</p>
+    <p>I'm also here to help you if you have <b>ANY</b> tech problems at school. Can't connect to email? Projector broken? Please email me, grab me while I'm walking down the hall, or let me know some other way. Remember, I'm here to help make your experience with technology at IAL better!</p>
+    <p>I know that learning to use some new technologies can be hard at first,&nbsp;{{ current_user.first_name }}. So, if any technology at IAL feels overwhelming or needlessly complicated, please let me know. I want to help you,&nbsp;{{ current_user.first_name }}!</p>
+    <p>Here's my <a href="http://www.facebook.com/frey.maxim" target="_blank">FaceBook</a>, <a href="https://twitter.com/jeffthemaximum" target="_blank">Twitter</a>, <a href="https://www.linkedin.com/profile/view?id=289517748" target="_blank">LinkedIn</a>, <a href="https://instagram.com/jeffthemaximum/" target="_blank">Instagram</a>, <a href="https://github.com/jeffthemaximum" target="_blank">GitHub</a>, <a href="http://www.jeffreymaxim.com" target="_blank">Personal Blog</a>, <a href="http://www.mrmaxim.org" target="_blank">and my former class website</a>. Feel free to follow me on any of them, and feel free to use any of them to contact me!</p>
+    <br>
+    <h4>Login to your IAL Gmail account</h4>
+    <p>An IAL Gmail account makes communicating with coworkers, students, and parents easier, so let's get started by having you login to that account. Here's how to do that:</p>
+    <div id="iframe">
+        <iframe align="middle" width="560" height="315" src="https://www.youtube.com/embed/T5SL31r9T-M" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <br>
+    <br>
+    <p>Your task here is to send an email to me from your IAL gmail account. It can have any subject and any body content. My email address is jeffrey.maxim@ialcs.org.</p>
+    <p>The first person from this group who successfully completes this task will win a small prize!</p>
+    <br>
+    <h4>Learn about tech coaching at IAL</h4>
+    <p>Here's some of the ways I'll help you this year:</p>
+    <ol>
+        <li>I will begin the year coaching teachers in the math department on fun, effective ways to use educational technology. Later in the year, I will coach the Science, Social Studies, ELA, and Specials teachers.</li>
+        <li>With the math teachers, I'll attend your department meetings, meet with you individually, and be available my email. We'll come up with ways to incorporate computers into your classroom teaching, and I'll help you in whatever ways are necessary!</li>
+        <li>The math department will be coached during the first trimester, ELA during the second, and Science, Social Studies, and Special during the third.</li>
+        <li>I can help you by coplanning a lesson, brainstorming ways to incorporate computers in your lesson, coteaching a class, researching EdTech resources for you to use in the classroom, helping come up with classroom management strategies for using computers with the kids, or anything else. Please, just ask!</li>
+        <li>Even if I'm not currently coaching your department, you should feel free to ask me about coaching. I'll help you even if I'm not currently focusing on your department.</li>
+    </ol>
+    <p>You're done learning everything you <b>need</b> to learn in my PD session for today. I hope you had fun. Please fill out the quiz/feedback form below. When you're done, you can also checkout the bonus challenges that are below the form!</p>
+    <br>
+    <div id="iframe">
+        <iframe src="https://docs.google.com/forms/d/1yCMlz34EAfZGan-ftVwsnSiBIk7PzdQFchNXp4XarrM/viewform?embedded=true" width="760" height="350" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+    </div>
+    <br>
+    <br>
+    <h4>Bonus Challenges!</h4>
+    <p>If you logged into your email, sent me an email, and completed the short quiz, you've done all the <b>required</b> work for my PD session. But, come on, &nbsp;{{ current_user.first_name }}, you're better than that, amirite? You want to learn how to use tech in some crazy, awesome ways! If you've got the time and motivation, continue on to the following, <b>unrequired</b>, bonus challenges!</p>
+    <div class="container" id="pd-pics">
+        <img src="{{ url_for('static', filename='img/house.gif') }}">
+    </div>
+    <br>
+    <h4>Bonus Challenges #1: Make a Google Form to use in the classroom!</h4>
+    <p>Follow the <a href="http://www.mrmaxim.org/home/google-form-pd" target="_blank">tutorial that I've written up at this link</a>. It'll show you all about what a google form is, how they're helpful in the classroom, and how to make a great google form to use in the classroom!</p>
+    <br>
+    <h4>Bonus Challenges #2: Make your own class website!</h4>
+    <p>Class websites are pretty great. <a href-"http://www.mrmaxim.org" target="_blank">Here's the one I used with my students last year</a>. They allow you to easily get materials to students, communicate news to parents, and keep administrators updated about what's going on in your classroom.</p>
+    <p>If you want to get started making your own, <a href="https://sites.google.com/site/mrmaximial/build-your-own-class-website" target="_blank">follow this tutorial that I've made for you!</a></p>
+    <br>
+    <h4>Yoor all dun now! Ktnxbai!</h4>
 </div>
 {% endblock %}
+
+<!--
+
+0) background, who am i, how tech makes life easier, pic: https://docs.google.com/drawings/d/1IvUDFKCZnL6iM80DsIWihHdzVP4JMG1yq8E-rjl1Kcg/edit
+
+1) login to google mail
+
+2) send jeffrey.maxim@ialcs.org an email - first person gets reward!
+
+3) intro to google forms using http://www.mrmaxim.org/home/google-form-pd
+
+4) Intro to google sites: https://sites.google.com/site/mrmaximial/build-your-own-class-website
+
+5) how to get coaching by me
+
+6) who i'll be coaching
+
+7) how to conact me
+
+//-->

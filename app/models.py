@@ -53,6 +53,7 @@ class User(UserMixin, db.Model):
             return False
         self.password = new_password
         db.session.add(self)
+        return True
 
 
 

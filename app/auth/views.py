@@ -5,7 +5,7 @@ from . import auth
 from .. import db
 from ..models import User
 from ..email import send_email
-from .forms import LoginForm, RegistrationForm, PasswordResetForm
+from .forms import LoginForm, RegistrationForm, PasswordResetForm, PasswordResetRequestForm
 
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -46,7 +46,7 @@ def register():
 
 @auth.route('/reset', methods=['GET', 'POST'])
 def password_reset_request():
-    form = PasswordResetForm()
+    form = PasswordResetRequestForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data.lower()).first()
         if user:
@@ -63,11 +63,9 @@ def password_reset_request():
 
 @auth.route('/reset/<token>', methods=['GET', 'POST'])
 def password_reset(token):
-    if current_user.is_anonymous():
-        return redirect(url_for('main.index'))
     form = PasswordResetForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = User.query.filter_by(email=form.email.data.lower()).first()
         if user is None:
             return redirect(url_for('main.index'))
         if user.reset_password(token, form.password.data):

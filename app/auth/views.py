@@ -6,7 +6,6 @@ from .. import db
 from ..models import User
 from ..email import send_email
 from .forms import LoginForm, RegistrationForm, PasswordResetForm
-import pudb
 
 
 @auth.route('/login', methods=['GET', 'POST'])

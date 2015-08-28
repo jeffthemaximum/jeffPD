@@ -3,6 +3,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app
 from flask.ext.login import UserMixin
 from . import db, login_manager
+from datetime import datetime
 
 
 class Role(db.Model):

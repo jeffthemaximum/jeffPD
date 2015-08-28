@@ -14,7 +14,6 @@ class Role(db.Model):
     def __repr__(self):
         return '<Role %r>' % self.name
 
-
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -54,6 +53,21 @@ class User(UserMixin, db.Model):
         self.password = new_password
         db.session.add(self)
         return True
+
+class Teacher(User):
+    logs = db.relationship('Log', backref='teacher', lazy='dynamic')
+
+class Coach(User):
+    logs = db.relationship('Log', backref='coach', lazy='dynamic')
+
+class Log(db.Model):
+    __tablename__ = 'posts'
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    # posts have one user and one game
+    teacher_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    coach_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 
 

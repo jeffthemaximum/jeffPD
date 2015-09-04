@@ -7099,3 +7099,32 @@ div#iframe {
   text-align:center;
   width:100%;
 }
+
+/*
+ * Create dark grey header with a white logo
+ */
+footer {
+  height:23px;
+  background-color:#149c82;
+  bottom:0px;
+  left:0px;
+  right:0px;
+  margin-bottom:0px;
+}
+
+footer p {
+  margin: 0;
+  padding: 0;
+  display: inline;
+  color: white;
+}
+
+footer p.footer_name {
+  float: left;
+  margin-left: 100px;
+}
+
+footer p.footer_email {
+  float: right;
+  margin-right: 100px;
+}

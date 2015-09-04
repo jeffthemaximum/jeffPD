@@ -5,7 +5,6 @@
 {% block head %}
 {{ super() }}
 <link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA1wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEREQAAAAAAEAABAAAAAAAQAAEAAAAAAAAAAQAAAAAAAAABAAAAAAAAAAEAAAAAAAAAAQAAAAAAAAABEREQAAAAAAEAAAAAAAAAAQAAAAAAAAABAAAAAAAAAAEAAAAAAAAAARERERAAAAAAAAAAAAAAAAAAAAAAD//wAAgf8AAL3/AAC9/wAA/f8AAP3/AAD9/wAA/f8AAPwPAAD9/wAA/f8AAP3/AAD9/wAA/AMAAP//AAD//wAA" rel="icon" type="image/x-icon" />
-<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/flatly.css') }}">
 {% endblock %}
 
@@ -50,10 +49,22 @@
 
     {% block page_content %}{% endblock %}
 </div>
+
+    {% block footer %}
+        <footer>
+            <div class="footer">
+                <p class="footer_name">Jeff Maxim</p>
+                <p class="footer_email">Contact information: <a href="mailto:frey.maxim@gmail.com">
+                frey.maxim@gmail.com</a></p>
+            </div>
+        </footer>
+    {% endblock %}
+
 {% endblock %}
+
+
 
 {% block scripts %}
 {{ super() }}
 {{ moment.include_moment() }}
 {% endblock %}
-

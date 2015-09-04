@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}JeffPD{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Hello, {% if current_user.is_authenticated() %}{{ current_user.first_name }}{% else %}Stranger{% endif %}!</h1>
+</div>
+<div class='container'>
+
+    <h4>By the end of this PD, you will:</h4>
+    <ul>
+        <li>Understand why Gmail filters are helpful.</li>
+        <li>Use Gmail filters to organize your email.</li>
+    </ul>
+    <br>
+
+    <h4>Why Gmail filters are helpful</h4>
+    <p>Hey {% if current_user.is_authenticated() %}{{ current_user.first_name }}{% else %}Stranger{% endif %}.</p>
+    <p>I've heard from many staff members who are feeling overwhelmed by the amount of emails in the Gmail inbox. They specifically feel overwhelmed by all the attendance emails they get everyday.</p>
+    <p>Never fear! There's a way to fix that!</p>
+    <p>Gmail filters allow you to automagically organize your emails into folders so that your inbox is more organized. After you setup a filter for your attendance emails, they will no longer show up in your inbox. They will be in your Gmail attendance email folder. Then, you'll only have important emails in your inbox, and you check your attendance folder if you want to see those attendance emails.</p>
+    <br>
+
+    <h4>How to use Gmail filters to organize your email.</h4>
+    <p>I made an amazing YouTube video tutorial to show you how to setup those filters. Check it out below!</p>
+
+    <div id="iframe">
+        <iframe width="420" height="315" src="https://www.youtube.com/embed/of8SGnsUWoY" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <p>If you want anymore extra help. <a href="https://support.google.com/mail/answer/6579?hl=en" target="_blank">checkout Google's official help page about using Filters</a></p>
+    <br>
+    <h4>Did I just make your day? Ruin it? Let me know! <a href="mailto:webmaster@example.com">Jeff Maxim</a> <h4>
+</div>
+{% endblock %}

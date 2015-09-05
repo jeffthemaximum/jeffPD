@@ -1,8 +1,8 @@
 from flask.ext.wtf import Form
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
 from wtforms.validators import Required, Length, Email, Regexp, EqualTo
 from wtforms import ValidationError
-from ..models import User
+from ..models import User, Teacher, Coach
 
 
 class LoginForm(Form):
@@ -24,6 +24,7 @@ class RegistrationForm(Form):
                                           'numbers, dots or underscores')])
     first_name = StringField('First Name', validators=[Required()])
     last_name = StringField('Last Name')
+    role = SelectField('Teacher or Coach?', choices=[('teacher', 'Teacher'), ('coach', 'Coach')], validators=[Required()])
     password = PasswordField('Password', validators=[
         Required(), EqualTo('password2', message='Passwords must match.')])
     password2 = PasswordField('Confirm password', validators=[Required()])

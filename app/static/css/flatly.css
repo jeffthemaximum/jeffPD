@@ -7130,3 +7130,8 @@ footer p.footer_email {
   float: right;
   margin-right: 100px;
 }
+
+ul#teachers.form-control {
+    border-width: 0px;
+    list-style-type: none;
+}

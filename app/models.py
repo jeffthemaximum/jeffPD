@@ -56,7 +56,7 @@ class User(UserMixin, db.Model):
         self.password = new_password
         db.session.add(self)
         return True
-
+        
 
 class Teacher(User):
     __tablename__ = 'teachers'

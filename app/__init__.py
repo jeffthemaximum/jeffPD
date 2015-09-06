@@ -33,4 +33,7 @@ def create_app(config_name):
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
 
+    from .private import private as private_blueprint
+    app.register_blueprint(private_blueprint, url_prefix='/private')
+
     return app

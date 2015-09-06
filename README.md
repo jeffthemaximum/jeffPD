@@ -1,7 +1,10 @@
-Flasky
+JeffPD
 ======
 
-This repository contains the source code examples for my O'Reilly book [Flask Web Development](http://www.flaskbook.com).
+A professional development website for teachers at Inwood Academy for Leadership Charter School.
 
-The commits and tags in this repository were carefully created to match the sequence in which concepts are presented in the book. Please read the section titled "How to Work with the Example Code" in the book's preface for instructions.
+Livesite is viewable here: [www.jeffpd.com](http://www.jeffpd.com)
 
+Site serves two major purposes:
+1. Hosts professional development resources for teachers to learn about Educational Technology tools and strategies
+2. Allows EdTech coaches to log notes about their coaching sessions with teachers.

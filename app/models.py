@@ -67,6 +67,11 @@ class Teacher(User):
         'Log',
         secondary='log_teacher_link'
     )
+    # teachers can have many coaches 
+    coaches = db.relationship(
+        'Coach',
+        secondary='coach_teacher_link'
+    )
 
 
 class Coach(User):
@@ -75,6 +80,11 @@ class Coach(User):
     id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
     # coaches have many logs
     logs = db.relationship('Log', backref='coach', lazy='dynamic')
+    # coaches have many teachers
+    teachers = db.relationship(
+        Teacher,
+        secondary='coach_teacher_link'
+    )
 
 
 class Log(db.Model):
@@ -97,6 +107,14 @@ class LogTeacherLink(db.Model):
     teacher_id = db.Column(db.Integer, db.ForeignKey('teachers.id'), primary_key=True)
     log = db.relationship(Log, backref=db.backref("teacher_assoc"))
     teacher = db.relationship(Teacher, backref=db.backref("log_assoc"))
+
+
+class CoachTeacherLink(db.Model):
+    __tablename__ = 'coach_teacher_link'
+    teacher_id = db.Column(db.Integer, db.ForeignKey('teachers.id'), primary_key=True)
+    coach_id = db.Column(db.Integer, db.ForeignKey('coaches.id'), primary_key=True)
+    teacher = db.relationship(Teacher, backref=db.backref("coach_assoc"))
+    coach = db.relationship(Coach, backref=db.backref("teacher_assoc"))
 
 
 @login_manager.user_loader

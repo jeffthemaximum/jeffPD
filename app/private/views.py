@@ -7,9 +7,9 @@ from .. import db
 import pudb
 
 
-@private.route('/log', methods=['GET', 'POST'])
+@private.route('/coach/log', methods=['GET', 'POST'])
 @login_required
-def log():
+def coach_log():
     if current_user.role == 'teacher':
         return render_template('private/teacher.html')
     else:
@@ -77,36 +77,50 @@ def log():
             db.session.add(log)
             db.session.commit()
             flash("Successfully added log!")
-            return redirect(url_for('private.log'))
+            return redirect(url_for('private.coach_log'))
 
-        return render_template('private/log.html', form=form)
+        return render_template('private/coach/log.html', form=form)
 
 
-@private.route('/', methods=['GET', 'POST'])
+@private.route('/coach')
+@login_required
+def coach():
+    return render_template('private/coach.html')
+
+
+@private.route('/coach/add')
+@login_required
+def add_teachers():
+    form = AddTeachersForm()
+    if form.validate_on_submit():
+        # teachers is a list of all the teacher id's
+        teachers = form.teachers.data
+        coach = Coach.query.filter_by(email=current_user.email).first()
+        # check if teachers are already coached by coach
+        if does_coach_already_coaches_teacher(form, coach):
+            for teacher_id in teachers:
+                teacher = Teacher.query.filter_by(id=teacher_id).first()
+                teacher_coach_connection = CoachTeacherLink(
+                    coach=coach,
+                    teacher=teacher)
+                db.session.add(teacher_coach_connection)
+                db.session.commit()
+            flash(
+                "You've successfully added teachers to your coaching roster!")
+        else:
+            flash("You already coach some or all of those teachers. Check your roster and try again.")
+    return render_template('private/coach/add.html', form=form)
+
+
+@private.route('/')
 @login_required
 def private():
-    if current_user.role == 'teacher':
-        return render_template('private/teacher.html')
+    if current_user.type == 'teacher':
+        return redirect(url_for('private.teacher'))
+    elif current_user.type == 'coach':
+        return redirect(url_for('private.coach'))
     else:
-        form = AddTeachersForm()
-        if form.validate_on_submit():
-            # teachers is a list of all the teacher id's
-            teachers = form.teachers.data
-            coach = Coach.query.filter_by(email=current_user.email).first()
-            # check if teachers are already coached by coach
-            if does_coach_already_coaches_teacher(form, coach):
-                for teacher_id in teachers:
-                    teacher = Teacher.query.filter_by(id=teacher_id).first()
-                    teacher_coach_connection = CoachTeacherLink(
-                        coach=coach,
-                        teacher=teacher)
-                    db.session.add(teacher_coach_connection)
-                    db.session.commit()
-                flash(
-                    "You've successfully added teachers to your coaching roster!")
-            else:
-                flash("You already coach some or all of those teachers. Check your roster and try again.")
-        return render_template('private/coach.html', form=form)
+        pass
 
 
 def does_coach_already_coaches_teacher(form, coach):

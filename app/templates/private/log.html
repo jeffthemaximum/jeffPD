@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}JeffPD - Coach Log Form{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Coach Log Form</h1>
+</div>
+<div class="test" id="test">
+    <p>Hello, {% if current_user.is_authenticated() %}{{ current_user.first_name }}{% else %}Stranger{% endif %}!</p>
+</div>
+<div class="col-md-4" id="coachees">
+    {{ wtf.quick_form(form) }}
+</div>
+{% endblock %}

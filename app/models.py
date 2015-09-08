@@ -24,6 +24,11 @@ class School(db.Model):
     teachers = db.relationship('Teacher', backref='school', lazy='dynamic')
     # schools have many coaches
     coaches = db.relationship('Coach', backref='school', lazy='dynamic')
+    # schools have many admins
+    administrators = db.relationship(
+        'Administrator',
+        backref='school',
+        lazy='dynamic')
 
 
 class User(UserMixin, db.Model):
@@ -138,7 +143,8 @@ class Administrator(User):
     __tablename__ = 'administrators'
     __mapper_args__ = {'polymorphic_identity': 'administrator'}
     id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
-    # coaches have many logs
+    # admin have one school
+    school_id = db.Column(db.Integer, db.ForeignKey('schools.id'))
 
 
 class Log(db.Model):

@@ -2,7 +2,7 @@ from flask.ext.wtf import Form
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
 from wtforms.validators import Required, Length, Email, Regexp, EqualTo
 from wtforms import ValidationError
-from ..models import User, Teacher, Coach
+from ..models import User, School
 
 
 class LoginForm(Form):
@@ -31,6 +31,10 @@ class RegistrationForm(Form):
             ('coach', 'Coach'),
             ('administrator', 'Administrator')],
         validators=[Required()])
+    school = SelectField(
+        "What school do you work for?",
+        coerce=int,
+        validators=[Required()])
     password = PasswordField('Password', validators=[
         Required(), EqualTo('password2', message='Passwords must match.')])
     password2 = PasswordField('Confirm password', validators=[Required()])
@@ -40,8 +44,8 @@ class RegistrationForm(Form):
         super(RegistrationForm, self).__init__(*args, **kwargs)
         # populates the role select field choices
         # returns a list of tuples with roleid, name
-        coaches = Coach.query.all()
-        self.coach.choices = [(coach.id, coach.email) for coach in coaches]
+        schools = School.query.all()
+        self.school.choices = [(school.id, school.name) for school in schools]
 
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():

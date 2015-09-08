@@ -39,7 +39,8 @@ def register():
                 username=form.username.data,
                 password=form.password.data,
                 first_name=form.first_name.data.capitalize(),
-                last_name=form.last_name.data.capitalize())
+                last_name=form.last_name.data.capitalize(),
+                school_id=form.school.data)
             db.session.add(teacher)
         # if registrant selects coach role, create new coach
         elif form.role.data == 'coach':
@@ -48,7 +49,8 @@ def register():
                 username=form.username.data,
                 password=form.password.data,
                 first_name=form.first_name.data.capitalize(),
-                last_name=form.last_name.data.capitalize())
+                last_name=form.last_name.data.capitalize(),
+                school_id=form.school.data)
             db.session.add(coach)
         elif form.role.data == 'administrator':
             admin = Administrator(
@@ -56,7 +58,8 @@ def register():
                 username=form.username.data,
                 password=form.password.data,
                 first_name=form.first_name.data.capitalize(),
-                last_name=form.last_name.data.capitalize())
+                last_name=form.last_name.data.capitalize(),
+                school_id=form.school.data)
             db.session.add(admin)
         db.session.commit()
         flash('You can now login.')

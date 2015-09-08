@@ -18,7 +18,7 @@ def coach_log():
             # get current coach
             curr_coach = current_user
 
-            # get teachers
+            # get list of teachers by id from form
             teachers_by_id = form.teachers.data
 
             # instantiate list of teachers
@@ -61,6 +61,8 @@ def coach_log():
                     log.general_teacher_tech_help = True
                 elif tag_num is 8:
                     log.google_resources = True
+                elif tag_num is 9:
+                    log.unbelievable = True
 
             db.session.add(log)
             db.session.commit()

@@ -127,6 +127,7 @@ class Log(db.Model):
     contact_nit = db.Column(db.Boolean, default=False)
     general_teacher_tech_help = db.Column(db.Boolean, default=False)
     google_resources = db.Column(db.Boolean, default=False)
+    unbelieavble = db.Column(db.Boolean, default=False)
 
 
 class LogTeacherLink(db.Model):

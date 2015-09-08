@@ -4,6 +4,7 @@ from flask import current_app
 from flask.ext.login import UserMixin
 from . import db, login_manager
 from datetime import datetime
+import pudb
 
 
 class Role(db.Model):
@@ -132,7 +133,7 @@ class Coach(User):
     logs = db.relationship('Log', backref='coach', lazy='dynamic')
     # coaches have many teachers
     teachers = db.relationship(
-        Teacher,
+        'Teacher',
         secondary='coach_teacher_link'
     )
     # coaches have one school
@@ -147,6 +148,16 @@ class Administrator(User):
     school_id = db.Column(db.Integer, db.ForeignKey('schools.id'))
 
 
+class Tag(db.Model):
+    __tablename__ = 'tags'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True)
+    # tags have many logs
+    logs = db.relationship(
+        'Log',
+        secondary='log_tag_link')
+
+
 class Log(db.Model):
     __tablename__ = 'logs'
     id = db.Column(db.Integer, primary_key=True)
@@ -155,23 +166,28 @@ class Log(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     # logs have many teachers
     teachers = db.relationship(
-        Teacher,
+        'Teacher',
         secondary='log_teacher_link'
     )
     # logs have one coach
     coach_id = db.Column(db.Integer, db.ForeignKey('coaches.id'))
-    # tags for easy searching
-    hardware = db.Column(db.Boolean, default=False)
-    coteach = db.Column(db.Boolean, default=False)
-    coplan = db.Column(db.Boolean, default=False)
-    jeffpd_publication = db.Column(db.Boolean, default=False)
-    google_maintenance = db.Column(db.Boolean, default=False)
-    teacher_chromebook_help = db.Column(db.Boolean, default=False)
-    contact_nit = db.Column(db.Boolean, default=False)
-    general_teacher_tech_help = db.Column(db.Boolean, default=False)
-    google_resources = db.Column(db.Boolean, default=False)
-    email_help = db.Column(db.Boolean, default=False)
-    unbelieavble = db.Column(db.Boolean, default=False)
+    # tags have many logs
+    tags = db.relationship(
+        'Tag',
+        secondary='log_tag_link')
+
+    # # tags for easy searching
+    # hardware = db.Column(db.Boolean, default=False)
+    # coteach = db.Column(db.Boolean, default=False)
+    # coplan = db.Column(db.Boolean, default=False)
+    # jeffpd_publication = db.Column(db.Boolean, default=False)
+    # google_maintenance = db.Column(db.Boolean, default=False)
+    # teacher_chromebook_help = db.Column(db.Boolean, default=False)
+    # contact_nit = db.Column(db.Boolean, default=False)
+    # general_teacher_tech_help = db.Column(db.Boolean, default=False)
+    # google_resources = db.Column(db.Boolean, default=False)
+    # email_help = db.Column(db.Boolean, default=False)
+    # unbelieavble = db.Column(db.Boolean, default=False)
 
 
 class LogTeacherLink(db.Model):
@@ -196,6 +212,27 @@ class CoachTeacherLink(db.Model):
     coach = db.relationship(Coach, backref=db.backref("teacher_assoc"))
 
 
+class LogTagLink(db.Model):
+    __tablename__ = 'log_tag_link'
+    tag_id = db.Column(db.Integer, db.ForeignKey(
+        'tags.id'),
+        primary_key=True)
+    log_id = db.Column(db.Integer, db.ForeignKey(
+        'logs.id'),
+        primary_key=True)
+    tag = db.relationship(Tag, backref=db.backref("log_assoc"))
+    log = db.relationship(Log, backref=db.backref("tag_assoc"))
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
+def add_tags_to_logs(log_id, tags):
+    log = Log.query.filter_by(id=log_id).first()
+    for tag in tags:
+        this_tag = Tag.query.filter_by(id=tag).first()
+        link = LogTagLink(log=log, tag=this_tag)
+        db.session.add(link)
+        db.session.commit()

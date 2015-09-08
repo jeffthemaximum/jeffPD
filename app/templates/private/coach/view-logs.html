@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}JeffPD - Coach{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Coach Dashboard</h1>
+</div>
+<div class="test" id="test">
+    <p>Hello, {% if current_user.is_authenticated() %}{{ current_user.first_name }}{% else %}Stranger{% endif %}!</p>
+    <p>Use this page to checkout all the logs you've created!</p>
+</div>
+<div class = "dashboard" id="teacher">
+    <table class="table table-striped table-hover ">
+      <thead>
+        <tr>
+          <th>Teacher</th>
+          <th>Date / Time</th>
+          <th>What you did</th>
+          <th>What you're doing next</th>
+          <th>Tags</th>
+          <th>Send teacher a message about this?</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for log in coach.logs %}
+        <tr>
+          <td>{% for teacher in log.teachers %}
+                {{ teacher.first_name }} {{ teacher.last_name }},
+              {% endfor %}
+          </td>
+          <td>{{ log.timestamp.strftime("%Y-%m-%d %H:%M") }}</td>
+          <td>{{ log.body }}</td>
+          <td>{{ log.next }}</td>
+          <td>Tags coming soon...</td>
+          <td><a href="mailto:{{ coach.email }}">{{ coach.email }}</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

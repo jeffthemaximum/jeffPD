@@ -10,6 +10,8 @@ import pudb
 @private.route('/coach/log', methods=['GET', 'POST'])
 @login_required
 def coach_log():
+    if current_user.type != 'coach':
+        return redirect(url_for('main.pd_list'))
     if current_user.role == 'teacher':
         return render_template('private/teacher.html')
     else:
@@ -63,6 +65,8 @@ def coach_log():
                     log.google_resources = True
                 elif tag_num is 9:
                     log.unbelievable = True
+                elif tag_num is 10:
+                    log.email_help = True
 
             db.session.add(log)
             db.session.commit()
@@ -75,12 +79,16 @@ def coach_log():
 @private.route('/coach')
 @login_required
 def coach():
+    if current_user.type != 'coach':
+        return redirect(url_for('main.pd_list'))
     return render_template('private/coach.html')
 
 
 @private.route('/coach/add', methods=['GET', 'POST'])
 @login_required
 def add_teachers():
+    if current_user.type != 'coach':
+        return redirect(url_for('main.pd_list'))
     form = AddTeachersForm()
     if form.validate_on_submit():
         # teachers is a list of all the teacher id's
@@ -102,15 +110,63 @@ def add_teachers():
     return render_template('private/coach/add.html', form=form)
 
 
+@private.route('/coach/view-logs')
+@login_required
+def view_coach_logs():
+    if current_user.type != 'coach':
+        return redirect(url_for('main.pd_list'))
+    coach = Coach.query.filter_by(email=current_user.email).first()
+    teachers = Teacher.query.all()
+    logs = Log.query.filter_by(coach_id=current_user.id).all()
+    return render_template(
+        'private/coach/view-logs.html',
+        Teacher=Teacher,
+        coach=coach,
+        teachers=teachers,
+        logs=logs)
+
+
+@private.route('/teacher')
+@login_required
+def teacher():
+    if current_user.type != 'teachers':
+        return redirect(url_for('main.pd_list'))
+    return render_template('private/teacher.html')
+
+
+@private.route('/teacher/stats')
+@login_required
+def teacher_stats():
+    if current_user.type != 'teachers':
+        return redirect(url_for('main.pd_list'))
+    return render_template('private/teacher/stats.html')
+
+
+@private.route('/teacher/logs')
+@login_required
+def teacher_logs():
+    if current_user.type != 'teachers':
+        return redirect(url_for('main.pd_list'))
+    # get list of all coaches
+    coaches = Coach.query.all()
+    # get current teacher
+    teacher = Teacher.query.filter_by(email=current_user.email).first()
+    return render_template(
+        'private/teacher/logs.html',
+        Coach=Coach,
+        coaches=coaches,
+        teacher=teacher)
+
+
 @private.route('/')
 @login_required
 def private():
-    if current_user.type == 'teacher':
+    if current_user.type == 'teachers':
         return redirect(url_for('private.teacher'))
     elif current_user.type == 'coach':
         return redirect(url_for('private.coach'))
     else:
-        pass
+        return redirect(url_for('main.pd_list'))
 
 
 def does_coach_already_coaches_teacher(form, coach):

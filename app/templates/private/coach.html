@@ -15,11 +15,15 @@
     <tr>
       <th>Add Teachers</th>
       <th>Log Coaching</th>
+      <th>View My Coaching Logs</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><a href="{{ url_for('private.add_teachers') }}">Add Teachers</a></td>
       <td><a href="{{ url_for('private.coach_log') }}">Log Coaching</a></td>
+      <td><a href="{{ url_for('private.view_coach_logs') }}">View My Logs</a></td>
     </tr>
+  </tbody>
+</table>
 {% endblock %}

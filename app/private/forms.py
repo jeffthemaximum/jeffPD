@@ -47,7 +47,8 @@ class CoachLogForm(Form):
         (6, 'Contact NIT'),
         (7, 'General Teacher Tech Help'),
         (8, 'Google Resource Creation/Maintenance'),
-        (9, 'Unbelievable')]
+        (9, 'Unbelievable'),
+        (10, 'Email Help')]
     tags = SelectMultipleField(
         'Tags',
         choices=my_choices,

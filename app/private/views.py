@@ -41,19 +41,7 @@ def coach_log():
                     teacher=teacher)
                 db.session.add(teacher_log)
 
-            # # add the tags
-            # log_tag_list = {
-            #     0: log.hardware,
-            #     1: log.coteach,
-            #     2: log.coplan,
-            #     3: log.jeffpd_publication,
-            #     4: log.google_maintenance,
-            #     5: log.teacher_chromebook_help,
-            #     6: log.contact_nit,
-            #     7: log.general_teacher_tech_help,
-            #     8: log.google_resources
-            # }
-            # iterate over tags from form
+            # add tags
             for tag_num in form.tags.data:
                 if tag_num is 0:
                     log.hardware = True
@@ -88,7 +76,7 @@ def coach():
     return render_template('private/coach.html')
 
 
-@private.route('/coach/add')
+@private.route('/coach/add', methods=['GET', 'POST'])
 @login_required
 def add_teachers():
     form = AddTeachersForm()

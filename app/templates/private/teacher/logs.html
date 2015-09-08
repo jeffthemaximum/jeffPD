@@ -24,7 +24,7 @@
         </tr>
       </thead>
       <tbody>
-        {% for log in logs %}
+        {% for log in teacher.logs %}
         <tr>
           <td>{{ Coach.query.filter_by(id=log.coach_id).first().first_name + " " + Coach.query.filter_by(id=log.coach_id).first().last_name }}</td>
           <td>{{ log.timestamp.strftime("%Y-%m-%d %H:%M") }}</td>

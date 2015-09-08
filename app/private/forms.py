@@ -1,7 +1,7 @@
 from flask.ext.wtf import Form
 from wtforms import SelectMultipleField, SubmitField, widgets, TextAreaField, SelectField
 from wtforms.validators import Required
-from ..models import Teacher, Coach
+from ..models import Teacher, Coach, Tag
 from flask.ext.login import current_user
 import pudb
 
@@ -38,21 +38,8 @@ class CoachLogForm(Form):
         coerce=int)
     body = TextAreaField('What\'d you do?')
     next = TextAreaField('Whatchu gonna do next?')
-    my_choices = [
-        (0, 'Hardware'),
-        (1, 'CoTeach'),
-        (2, 'CoPlan'),
-        (3, 'JeffPD Publication'),
-        (4, 'Google Maintenance'),
-        (5, 'Teacher Chromebook Help'),
-        (6, 'Contact NIT'),
-        (7, 'General Teacher Tech Help'),
-        (8, 'Google Resource Creation/Maintenance'),
-        (9, 'Unbelievable'),
-        (10, 'Email Help')]
     tags = SelectMultipleField(
         'Tags',
-        choices=my_choices,
         coerce=int)
     submit = SubmitField('Submit')
 
@@ -62,7 +49,9 @@ class CoachLogForm(Form):
         # returns a list of tuples with roleid, name
         curr_coach = current_user
         teachers = curr_coach.teachers
+        tags = Tag.query.all()
         self.teachers.choices = [(teacher.id, teacher.email) for teacher in teachers]
+        self.tags.choices = [(tag.id, tag.name) for tag in tags]
 
 
 class AdministratorSelectsCoachesForm(Form):

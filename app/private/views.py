@@ -2,6 +2,7 @@ from flask import render_template, flash, redirect, url_for
 from flask.ext.login import current_user, login_required
 from . import private
 from ..models import Teacher, CoachTeacherLink, Coach, Log, LogTeacherLink
+from ..models import LogTagLink, Tag
 from .forms import AddTeachersForm, CoachLogForm
 from .forms import AdministratorSelectsTeachersForm, AdministratorSelectsCoachesForm
 from .. import db
@@ -45,29 +46,12 @@ def coach_log():
                 db.session.add(teacher_log)
 
             # add tags
-            for tag_num in form.tags.data:
-                if tag_num is 0:
-                    log.hardware = True
-                elif tag_num is 1:
-                    log.coteach = True
-                elif tag_num is 2:
-                    log.coplan = True
-                elif tag_num is 3:
-                    log.jeffpd_publication = True
-                elif tag_num is 4:
-                    log.google_maintenance = True
-                elif tag_num is 5:
-                    log.teacher_chromebook_help = True
-                elif tag_num is 6:
-                    log.contact_nit = True
-                elif tag_num is 7:
-                    log.general_teacher_tech_help = True
-                elif tag_num is 8:
-                    log.google_resources = True
-                elif tag_num is 9:
-                    log.unbelievable = True
-                elif tag_num is 10:
-                    log.email_help = True
+            for tag_id in form.tags.data:
+                tag = Tag.query.filter_by(id=tag_id).first()
+                log_tag = LogTagLink(
+                    log=log,
+                    tag=tag)
+                db.session.add(log_tag)
 
             db.session.add(log)
             db.session.commit()

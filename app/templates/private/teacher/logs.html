@@ -24,13 +24,16 @@
         </tr>
       </thead>
       <tbody>
-        {% for log in teacher.logs %}
+        {% for log in logs %}
         <tr>
           <td>{{ Coach.query.filter_by(id=log.coach_id).first().first_name + " " + Coach.query.filter_by(id=log.coach_id).first().last_name }}</td>
           <td>{{ log.timestamp.strftime("%Y-%m-%d %H:%M") }}</td>
           <td>{{ log.body }}</td>
           <td>{{ log.next }}</td>
-          <td>Tags coming soon...</td>
+          <td>{% for tag in log.tags %}
+                {{ tag.name }},
+              {% endfor %}
+          </td>
           <td><a href="mailto:{{ Coach.query.filter_by(id=log.coach_id).first().email }}">{{ Coach.query.filter_by(id=log.coach_id).first().email }}</a></td>
         </tr>
         {% endfor %}

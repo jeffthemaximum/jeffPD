@@ -75,38 +75,6 @@ class User(UserMixin, db.Model):
         return True
 
 
-def convert_users_to_teachers():
-    users = User.query.all()
-    for user in users:
-        if user.type != 'coach' and user.type != 'teacher':
-            teacher = Teacher(
-                email=user.email,
-                username=user.username,
-                password_hash=user.password_hash,
-                first_name=user.first_name,
-                last_name=user.last_name)
-            db.session.delete(user)
-            db.session.commit()
-            db.session.add(teacher)
-            db.session.commit()
-
-
-def add_teachers_to_ial():
-    teachers = Teacher.query.all()
-    school = School.query.first()
-    for teacher in teachers:
-        teacher.school_id = school.id
-        db.session.commit()
-
-
-def add_coaches_to_ial():
-    coaches = Coach.query.all()
-    school = School.query.first()
-    for coach in coaches:
-        coach.school_id = school.id
-        db.session.commit()
-
-
 class Teacher(User):
     __tablename__ = 'teachers'
     __mapper_args__ = {'polymorphic_identity': 'teachers'}
@@ -176,19 +144,6 @@ class Log(db.Model):
         'Tag',
         secondary='log_tag_link')
 
-    # # tags for easy searching
-    # hardware = db.Column(db.Boolean, default=False)
-    # coteach = db.Column(db.Boolean, default=False)
-    # coplan = db.Column(db.Boolean, default=False)
-    # jeffpd_publication = db.Column(db.Boolean, default=False)
-    # google_maintenance = db.Column(db.Boolean, default=False)
-    # teacher_chromebook_help = db.Column(db.Boolean, default=False)
-    # contact_nit = db.Column(db.Boolean, default=False)
-    # general_teacher_tech_help = db.Column(db.Boolean, default=False)
-    # google_resources = db.Column(db.Boolean, default=False)
-    # email_help = db.Column(db.Boolean, default=False)
-    # unbelieavble = db.Column(db.Boolean, default=False)
-
 
 class LogTeacherLink(db.Model):
     __tablename__ = 'log_teacher_link'
@@ -235,4 +190,36 @@ def add_tags_to_logs(log_id, tags):
         this_tag = Tag.query.filter_by(id=tag).first()
         link = LogTagLink(log=log, tag=this_tag)
         db.session.add(link)
+        db.session.commit()
+
+
+def convert_users_to_teachers():
+    users = User.query.all()
+    for user in users:
+        if user.type != 'coach' and user.type != 'teacher':
+            teacher = Teacher(
+                email=user.email,
+                username=user.username,
+                password_hash=user.password_hash,
+                first_name=user.first_name,
+                last_name=user.last_name)
+            db.session.delete(user)
+            db.session.commit()
+            db.session.add(teacher)
+            db.session.commit()
+
+
+def add_teachers_to_ial():
+    teachers = Teacher.query.all()
+    school = School.query.first()
+    for teacher in teachers:
+        teacher.school_id = school.id
+        db.session.commit()
+
+
+def add_coaches_to_ial():
+    coaches = Coach.query.all()
+    school = School.query.first()
+    for coach in coaches:
+        coach.school_id = school.id
         db.session.commit()

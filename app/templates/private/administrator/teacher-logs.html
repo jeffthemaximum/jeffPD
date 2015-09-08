@@ -32,7 +32,10 @@
           <td>{{ log.timestamp.strftime("%Y-%m-%d %H:%M") }}</td>
           <td>{{ log.body }}</td>
           <td>{{ log.next }}</td>
-          <td>Tags coming soon...</td>
+          <td>{% for tag in log.tags %}
+                {{ tag.name }},
+              {% endfor %}
+          </td>
           <td><a href="mailto:{{ log.coach.email }}">{{ log.coach.email }}</a></td>
         </tr>
         {% endfor %}

@@ -16,6 +16,16 @@ class Role(db.Model):
         return '<Role %r>' % self.name
 
 
+class School(db.Model):
+    __tablename__ = 'schools'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True)
+    # schools have many teachers
+    teachers = db.relationship('Teacher', backref='school', lazy='dynamic')
+    # schools have many coaches
+    coaches = db.relationship('Coach', backref='school', lazy='dynamic')
+
+
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -75,6 +85,22 @@ def convert_users_to_teachers():
             db.session.commit()
 
 
+def add_teachers_to_ial():
+    teachers = Teacher.query.all()
+    school = School.query.first()
+    for teacher in teachers:
+        teacher.school_id = school.id
+        db.session.commit()
+
+
+def add_coaches_to_ial():
+    coaches = Coach.query.all()
+    school = School.query.first()
+    for coach in coaches:
+        coach.school_id = school.id
+        db.session.commit()
+
+
 class Teacher(User):
     __tablename__ = 'teachers'
     __mapper_args__ = {'polymorphic_identity': 'teachers'}
@@ -89,6 +115,8 @@ class Teacher(User):
         'Coach',
         secondary='coach_teacher_link'
     )
+    # teachers have one school
+    school_id = db.Column(db.Integer, db.ForeignKey('schools.id'))
 
 
 class Coach(User):
@@ -102,6 +130,8 @@ class Coach(User):
         Teacher,
         secondary='coach_teacher_link'
     )
+    # coaches have one school
+    school_id = db.Column(db.Integer, db.ForeignKey('schools.id'))
 
 
 class Administrator(User):

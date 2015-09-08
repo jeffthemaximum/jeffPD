@@ -36,6 +36,13 @@ class RegistrationForm(Form):
     password2 = PasswordField('Confirm password', validators=[Required()])
     submit = SubmitField('Register')
 
+    def __init__(self, *args, **kwargs):
+        super(RegistrationForm, self).__init__(*args, **kwargs)
+        # populates the role select field choices
+        # returns a list of tuples with roleid, name
+        coaches = Coach.query.all()
+        self.coach.choices = [(coach.id, coach.email) for coach in coaches]
+
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
             raise ValidationError('Email already registered.')

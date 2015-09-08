@@ -3,6 +3,7 @@ from flask.ext.login import current_user, login_required
 from . import private
 from ..models import Teacher, CoachTeacherLink, Coach, Log, LogTeacherLink
 from .forms import AddTeachersForm, CoachLogForm
+from .forms import AdministratorSelectsTeachersForm, AdministratorSelectsCoachesForm
 from .. import db
 import pudb
 
@@ -158,6 +159,78 @@ def teacher_logs():
         teacher=teacher)
 
 
+@private.route('/administrator')
+@login_required
+def administrator():
+    if current_user.type != 'administrator':
+        return redirect(url_for('main.pd_list'))
+    return render_template('private/administrator.html')
+
+
+@private.route('/administrator/select-coaches', methods=['GET', 'POST'])
+@login_required
+def adminstrator_selects_coaches():
+    if current_user.type != 'administrator':
+        return redirect(url_for('main.pd_list'))
+
+    form = AdministratorSelectsCoachesForm()
+
+    if form.validate_on_submit():
+        return redirect(url_for(
+            'private.administrator_views_coach_logs',
+            coach_id=form.coach.data))
+
+    return render_template(
+        'private/administrator/select-coaches.html',
+        form=form)
+
+
+@private.route('/administrator/coach-logs/<coach_id>')
+@login_required
+def administrator_views_coach_logs(coach_id):
+    if current_user.type != 'administrator':
+        return redirect(url_for('main.pd_list'))
+    # query db for coach
+    coach_id = int(coach_id)
+    coach = Coach.query.filter_by(id=coach_id).first()
+    teachers = Teacher.query.all()
+    return render_template(
+        'private/administrator/coach-logs.html',
+        coach=coach,
+        teachers=teachers)
+
+
+@private.route('/administrator/select-teachers', methods=['GET', 'POST'])
+@login_required
+def adminstrator_selects_teachers():
+    if current_user.type != 'administrator':
+        return redirect(url_for('main.pd_list'))
+
+    form = AdministratorSelectsTeachersForm()
+
+    if form.validate_on_submit():
+        return redirect(url_for(
+            'private.administrator_views_teacher_logs',
+            teacher_id=form.teacher.data))
+
+    return render_template(
+        'private/administrator/select-teachers.html',
+        form=form)
+
+
+@private.route('/administrator/teacher-logs/<teacher_id>')
+@login_required
+def administrator_views_teacher_logs(teacher_id):
+    if current_user.type != 'administrator':
+        return redirect(url_for('main.pd_list'))
+    # query db for coach
+    teacher_id = int(teacher_id)
+    teacher = Teacher.query.filter_by(id=teacher_id).first()
+    return render_template(
+        'private/administrator/teacher-logs.html',
+        teacher=teacher)
+
+
 @private.route('/')
 @login_required
 def private():
@@ -165,6 +238,8 @@ def private():
         return redirect(url_for('private.teacher'))
     elif current_user.type == 'coach':
         return redirect(url_for('private.coach'))
+    elif current_user.type == 'administrator':
+        return redirect(url_for('private.administrator'))
     else:
         return redirect(url_for('main.pd_list'))
 

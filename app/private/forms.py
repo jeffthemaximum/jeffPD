@@ -1,6 +1,7 @@
 from flask.ext.wtf import Form
-from wtforms import SelectMultipleField, SubmitField, widgets, TextAreaField
-from ..models import Teacher
+from wtforms import SelectMultipleField, SubmitField, widgets, TextAreaField, SelectField
+from wtforms.validators import Required
+from ..models import Teacher, Coach
 from flask.ext.login import current_user
 import pudb
 
@@ -62,3 +63,33 @@ class CoachLogForm(Form):
         curr_coach = current_user
         teachers = curr_coach.teachers
         self.teachers.choices = [(teacher.id, teacher.email) for teacher in teachers]
+
+
+class AdministratorSelectsCoachesForm(Form):
+    coach = SelectField(
+        "Which coach\'s logs do you wanna see?",
+        coerce=int,
+        validators=[Required()])
+    submit = SubmitField('Submit')
+
+    def __init__(self, *args, **kwargs):
+        super(AdministratorSelectsCoachesForm, self).__init__(*args, **kwargs)
+        # populates the role select field choices
+        # returns a list of tuples with roleid, name
+        coaches = Coach.query.all()
+        self.coach.choices = [(coach.id, coach.email) for coach in coaches]
+
+
+class AdministratorSelectsTeachersForm(Form):
+    teacher = SelectField(
+        "Which teacher\'s logs do you wanna see?",
+        coerce=int,
+        validators=[Required()])
+    submit = SubmitField('Submit')
+
+    def __init__(self, *args, **kwargs):
+        super(AdministratorSelectsTeachersForm, self).__init__(*args, **kwargs)
+        # populates the role select field choices
+        # returns a list of tuples with roleid, name
+        teachers = Teacher.query.all()
+        self.teacher.choices = [(teacher.id, teacher.email) for teacher in teachers]

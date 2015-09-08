@@ -3,7 +3,7 @@ from flask.ext.login import login_user, logout_user, login_required, \
     current_user
 from . import auth
 from .. import db
-from ..models import User, Teacher, Coach
+from ..models import User, Teacher, Coach, Administrator
 from ..email import send_email
 from .forms import LoginForm, RegistrationForm, PasswordResetForm, PasswordResetRequestForm
 
@@ -34,20 +34,30 @@ def register():
     if form.validate_on_submit():
         # if registrant selects 'teacher' role, create new teacher
         if form.role.data == 'teacher':
-            teacher = Teacher(email=form.email.data.lower(),
-                        username=form.username.data,
-                        password=form.password.data,
-                        first_name=form.first_name.data.capitalize(),
-                        last_name=form.last_name.data.capitalize())
+            teacher = Teacher(
+                email=form.email.data.lower(),
+                username=form.username.data,
+                password=form.password.data,
+                first_name=form.first_name.data.capitalize(),
+                last_name=form.last_name.data.capitalize())
             db.session.add(teacher)
-        # if registrant selects coach role, create new coach 
+        # if registrant selects coach role, create new coach
         elif form.role.data == 'coach':
-            coach = Coach(email=form.email.data.lower(),
-                        username=form.username.data,
-                        password=form.password.data,
-                        first_name=form.first_name.data.capitalize(),
-                        last_name=form.last_name.data.capitalize())
+            coach = Coach(
+                email=form.email.data.lower(),
+                username=form.username.data,
+                password=form.password.data,
+                first_name=form.first_name.data.capitalize(),
+                last_name=form.last_name.data.capitalize())
             db.session.add(coach)
+        elif form.role.data == 'administrator':
+            admin = Administrator(
+                email=form.email.data.lower(),
+                username=form.username.data,
+                password=form.password.data,
+                first_name=form.first_name.data.capitalize(),
+                last_name=form.last_name.data.capitalize())
+            db.session.add(admin)
         db.session.commit()
         flash('You can now login.')
         return redirect(url_for('auth.login'))

@@ -104,6 +104,13 @@ class Coach(User):
     )
 
 
+class Administrator(User):
+    __tablename__ = 'administrators'
+    __mapper_args__ = {'polymorphic_identity': 'administrator'}
+    id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    # coaches have many logs
+
+
 class Log(db.Model):
     __tablename__ = 'logs'
     id = db.Column(db.Integer, primary_key=True)

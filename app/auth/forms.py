@@ -24,7 +24,13 @@ class RegistrationForm(Form):
                                           'numbers, dots or underscores')])
     first_name = StringField('First Name', validators=[Required()])
     last_name = StringField('Last Name')
-    role = SelectField('Teacher or Coach?', choices=[('teacher', 'Teacher'), ('coach', 'Coach')], validators=[Required()])
+    role = SelectField(
+        'Teacher or Coach?',
+        choices=[
+            ('teacher', 'Teacher'),
+            ('coach', 'Coach'),
+            ('administrator', 'Administrator')],
+        validators=[Required()])
     password = PasswordField('Password', validators=[
         Required(), EqualTo('password2', message='Passwords must match.')])
     password2 = PasswordField('Confirm password', validators=[Required()])

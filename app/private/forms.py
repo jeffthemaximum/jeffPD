@@ -27,7 +27,7 @@ class AddTeachersForm(Form):
         super(AddTeachersForm, self).__init__(*args, **kwargs)
         # populates the role select field choices
         # returns a list of tuples with roleid, name
-        query = Teacher.query.order_by(Teacher.email).all()
+        query = Teacher.query.filter_by(school=current_user.school).order_by(Teacher.email).all()
         choices = [(teacher.id, teacher.email) for teacher in query]
         self.teachers.choices = choices
 
@@ -65,7 +65,7 @@ class AdministratorSelectsCoachesForm(Form):
         super(AdministratorSelectsCoachesForm, self).__init__(*args, **kwargs)
         # populates the role select field choices
         # returns a list of tuples with roleid, name
-        coaches = Coach.query.all()
+        coaches = Coach.query.filter_by(school=current_user.school).order_by(Teacher.email).all()
         self.coach.choices = [(coach.id, coach.email) for coach in coaches]
 
 
@@ -80,5 +80,5 @@ class AdministratorSelectsTeachersForm(Form):
         super(AdministratorSelectsTeachersForm, self).__init__(*args, **kwargs)
         # populates the role select field choices
         # returns a list of tuples with roleid, name
-        teachers = Teacher.query.all()
+        teachers = Teacher.query.filter_by(school=current_user.school).order_by(Teacher.email).all()
         self.teacher.choices = [(teacher.id, teacher.email) for teacher in teachers]

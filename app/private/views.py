@@ -101,13 +101,10 @@ def view_coach_logs():
     if current_user.type != 'coach':
         return redirect(url_for('main.pd_list'))
     coach = Coach.query.filter_by(email=current_user.email).first()
-    teachers = Teacher.query.all()
     logs = Log.query.filter_by(coach_id=current_user.id).all()
     return render_template(
         'private/coach/view-logs.html',
-        Teacher=Teacher,
         coach=coach,
-        teachers=teachers,
         logs=logs)
 
 
@@ -132,14 +129,11 @@ def teacher_stats():
 def teacher_logs():
     if current_user.type != 'teachers':
         return redirect(url_for('main.pd_list'))
-    # get list of all coaches
-    coaches = Coach.query.all()
     # get current teacher
     teacher = Teacher.query.filter_by(email=current_user.email).first()
     return render_template(
         'private/teacher/logs.html',
         Coach=Coach,
-        coaches=coaches,
         teacher=teacher)
 
 
@@ -177,11 +171,9 @@ def administrator_views_coach_logs(coach_id):
     # query db for coach
     coach_id = int(coach_id)
     coach = Coach.query.filter_by(id=coach_id).first()
-    teachers = Teacher.query.all()
     return render_template(
         'private/administrator/coach-logs.html',
-        coach=coach,
-        teachers=teachers)
+        coach=coach)
 
 
 @private.route('/administrator/select-teachers', methods=['GET', 'POST'])

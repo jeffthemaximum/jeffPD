@@ -193,6 +193,7 @@ table {
 }
 td,
 th {
+  max-width: 400px;
   padding: 0;
 }
 /*! Source: https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css */

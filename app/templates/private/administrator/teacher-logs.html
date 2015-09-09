@@ -30,7 +30,7 @@
           <td>{{ teacher.first_name }} {{teacher.last_name }}</td>
           <td>{{ log.coach.first_name }} {{ log.coach.last_name }}</td>
           <td>{{ log.timestamp.strftime("%Y-%m-%d %H:%M") }}</td>
-          <td>{{ log.body }}</td>
+          <td id="log-body">{{ log.body }}</td>
           <td>{{ log.next }}</td>
           <td>{% for tag in log.tags %}
                 {{ tag.name }},

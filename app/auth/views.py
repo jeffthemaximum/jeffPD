@@ -1,11 +1,14 @@
 from flask import render_template, redirect, request, url_for, flash
-from flask.ext.login import login_user, logout_user, login_required, \
-    current_user
+from flask.ext.login import login_user, logout_user, login_required
 from . import auth
 from .. import db
 from ..models import User, Teacher, Coach, Administrator
 from ..email import send_email
-from .forms import LoginForm, RegistrationForm, PasswordResetForm, PasswordResetRequestForm
+from .forms import LoginForm, RegistrationForm, PasswordResetForm, \
+    PasswordResetRequestForm
+
+
+admin_email = 'frey.maxim@gmail.com'
 
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -42,6 +45,7 @@ def register():
                 last_name=form.last_name.data.capitalize(),
                 school_id=form.school.data)
             db.session.add(teacher)
+            user = teacher
         # if registrant selects coach role, create new coach
         elif form.role.data == 'coach':
             coach = Coach(
@@ -52,6 +56,7 @@ def register():
                 last_name=form.last_name.data.capitalize(),
                 school_id=form.school.data)
             db.session.add(coach)
+            user = coach
         elif form.role.data == 'administrator':
             admin = Administrator(
                 email=form.email.data.lower(),
@@ -61,6 +66,12 @@ def register():
                 last_name=form.last_name.data.capitalize(),
                 school_id=form.school.data)
             db.session.add(admin)
+            user = admin
+        send_email(
+            admin_email,
+            "New User at JeffPD",
+            'mail/new_user',
+            user=user)
         db.session.commit()
         flash('You can now login.')
         return redirect(url_for('auth.login'))

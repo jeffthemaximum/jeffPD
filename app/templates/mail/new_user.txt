@@ -1,1 +1,3 @@
 User {{ user.username }} has joined.
+They joined {{ user.school }}.
+They joined as {{ user.type }}.

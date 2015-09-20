@@ -156,24 +156,36 @@ def adminstrator_selects_coaches():
     if form.validate_on_submit():
         return redirect(url_for(
             'private.administrator_views_coach_logs',
-            coach_id=form.coach.data))
-
+            coach_id=form.coach.data,
+            tag = form.tags.data))
     return render_template(
         'private/administrator/select-coaches.html',
         form=form)
 
 
-@private.route('/administrator/coach-logs/<coach_id>')
+@private.route('/administrator/coach-logs/<coach_id>/<tag>')
 @login_required
-def administrator_views_coach_logs(coach_id):
+def administrator_views_coach_logs(coach_id, tag):
     if current_user.type != 'administrator':
         return redirect(url_for('main.pd_list'))
     # query db for coach
     coach_id = int(coach_id)
     coach = Coach.query.filter_by(id=coach_id).first()
+    if tag == '0':
+        logs = coach.logs.order_by(Log.timestamp).all()
+        logs = reversed(logs)
+    else:
+        coach_logs = []
+        tag = Tag.query.filter_by(id=tag).first()
+        for log in tag.logs:
+            if log.coach_id == coach_id:
+                coach_logs.append(log)
+        logs = coach_logs
+        logs = reversed(logs)
     return render_template(
         'private/administrator/coach-logs.html',
-        coach=coach)
+        coach=coach,
+        logs=logs)
 
 
 @private.route('/administrator/select-teachers', methods=['GET', 'POST'])

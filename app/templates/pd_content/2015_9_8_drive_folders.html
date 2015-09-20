@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}JeffPD{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Hello, {% if current_user.is_authenticated() %}{{ current_user.first_name }}{% else %}Stranger{% endif %}!</h1>
+    <h2>Use Google Drive folders to organize your files</h2>
+</div>
+<div class='container'>
+<!-- 
+    <h4>By the end of this PD, you will:</h4>
+    <ul>
+        <li>Learn what Google Drive is.</li>
+        <li>Understand why Google Drive folders are helpful.</li>
+        <li>Use folder to organize your Google Drive.</li>
+    </ul>
+    <br> -->
+    <h4>Here's what you need to know:</h4>
+    <ul>
+        <li>Go to <a href="http://drive.google.com" target="_blank">drive.google.com</a> to access Google Drive.</li>
+        <li>Click New --> Folder to make a new folder.</li>
+        <li>Drag/drop your Google Docs, Sheets, Slides, etc. into organized folders.</li>
+    </ul>
+    <br>
+    <h4>Why Google Drive folders are helpful</h4>
+    <p>Hey {% if current_user.is_authenticated() %}{{ current_user.first_name }}{% else %}Stranger{% endif %}!</p>
+    <p>I've worked with some teachers who are having trouble organizing the various Google Docs, Sheets, and Slides that they're making. Google Drive allows you to organize all your Docs, Sheets, Slides into folders, just like you've always done with files on your previous computers.</p>
+    <p>Here's a picture that shows what a well-organized Google Drive looks like:</p>
+        <div class="container" id="pd-pics">
+        <img src="{{ url_for('static', filename='img/organized_folders.png') }}">
+    </div>
+    <p>An disorganized Google Drive doesn't have folders. Google Docs, Sheets, Slides, and other files are just randomly placed in the Drive. It looks like this:</p>
+    <p>Here's a picture that shows what a well-organized Google Drive looks like:</p>
+        <div class="container" id="pd-pics">
+        <img src="{{ url_for('static', filename='img/disorganized_folders.png') }}">
+    </div>
+    <p>Notice how the Drive in the first picture, there are a bunch of folders. You can tell there's folders by looking at the icon just to the left of the folder names, like "2014-2015" and "504 ELA". If I click on the folders, I'll find my Google files all organized nicely inside of these folders.</p>
+    <p>In the second picture, you can see there's Google Docs, Forms, Sheets, and other files that are just sitting disorganized in my Drive. This makes it hard to keep track of the files. You can tell these are Google Docs, Forms, and Sheets by seeing the blue, green, and purple square icons next to the file names.</p>
+    <p>Organizing your files into folders make it's easier to find similar files. You want to organize your Google Drive like the first pic, not the second pic, and the next section will show you how...</p>
+    <br>
+    <h4>How to use Google Drive folders to organize your files.</h4>
+    <p>I made an amazing YouTube video tutorial to show you how to setup those folders. Check it out below!</p>
+
+    <div id="iframe">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/CU_r-qPm7OE" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <p>These are just the basics of how you can use folders in Google Drive to help organize your life. If you want to learn about some more ways, checkout this link:. <a href="http://www.alicekeeler.com/teachertech/2015/04/27/10-tips-for-folders-in-google-drive/" target="_blank">http://www.alicekeeler.com/teachertech/2015/04/27/10-tips-for-folders-in-google-drive/</a></p>
+    <br>
+    <h4>Did I just make your day? Ruin it? Let me know! <a href="mailto:frey.maxim@gmail.com">Jeff Maxim</a> <h4>
+</div>
+{% endblock %}

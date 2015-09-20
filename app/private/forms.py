@@ -54,11 +54,16 @@ class CoachLogForm(Form):
         self.tags.choices = [(tag.id, tag.name) for tag in tags]
 
 
+
 class AdministratorSelectsCoachesForm(Form):
     coach = SelectField(
         "Which coach\'s logs do you wanna see?",
         coerce=int,
         validators=[Required()])
+    tags = SelectField(
+        'Optional: search by coaching tag',
+        coerce=int,
+        default=(0, ''))
     submit = SubmitField('Submit')
 
     def __init__(self, *args, **kwargs):
@@ -67,6 +72,8 @@ class AdministratorSelectsCoachesForm(Form):
         # returns a list of tuples with roleid, name
         coaches = Coach.query.filter_by(school=current_user.school).order_by(Teacher.email).all()
         self.coach.choices = [(coach.id, coach.email) for coach in coaches]
+        tags = Tag.query.order_by(Tag.id).all()
+        self.tags.choices = [(tag.id, tag.name) for tag in tags]
 
 
 class AdministratorSelectsTeachersForm(Form):

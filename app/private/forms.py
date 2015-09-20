@@ -61,7 +61,7 @@ class AdministratorSelectsCoachesForm(Form):
         coerce=int,
         validators=[Required()])
     tags = SelectField(
-        'Optional: search by coaching tag',
+        'Search by Tag. Leave blank to view all logs.',
         coerce=int,
         default=(0, ''))
     submit = SubmitField('Submit')

@@ -49,6 +49,7 @@ class CoachLogForm(Form):
         # returns a list of tuples with roleid, name
         curr_coach = current_user
         teachers = curr_coach.teachers
+        teachers = sorted(teachers, key=lambda teacher: teacher.email)
         tags = Tag.query.all()
         self.teachers.choices = [(teacher.id, teacher.email) for teacher in teachers]
         self.tags.choices = [(tag.id, tag.name) for tag in tags]

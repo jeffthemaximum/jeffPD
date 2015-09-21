@@ -9,6 +9,23 @@ from .. import db
 import pudb
 
 
+def search_coach_logs_by_tag(coach_id, tag_id):
+    coach_id = int(coach_id)
+    coach = Coach.query.filter_by(id=coach_id).first()
+    if tag_id == '0':
+        logs = coach.logs.order_by(Log.timestamp).all()
+        logs = reversed(logs)
+    else:
+        coach_logs = []
+        tag = Tag.query.filter_by(id=tag_id).first()
+        for log in tag.logs:
+            if log.coach_id == coach_id:
+                coach_logs.append(log)
+        logs = coach_logs
+        logs = reversed(logs)
+    return logs
+
+
 @private.route('/coach/log', methods=['GET', 'POST'])
 @login_required
 def coach_log():
@@ -169,19 +186,8 @@ def administrator_views_coach_logs(coach_id, tag):
     if current_user.type != 'administrator':
         return redirect(url_for('main.pd_list'))
     # query db for coach
-    coach_id = int(coach_id)
     coach = Coach.query.filter_by(id=coach_id).first()
-    if tag == '0':
-        logs = coach.logs.order_by(Log.timestamp).all()
-        logs = reversed(logs)
-    else:
-        coach_logs = []
-        tag = Tag.query.filter_by(id=tag).first()
-        for log in tag.logs:
-            if log.coach_id == coach_id:
-                coach_logs.append(log)
-        logs = coach_logs
-        logs = reversed(logs)
+    logs = search_coach_logs_by_tag(coach_id, tag)
     return render_template(
         'private/administrator/coach-logs.html',
         coach=coach,

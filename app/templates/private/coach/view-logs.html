@@ -24,7 +24,7 @@
         </tr>
       </thead>
       <tbody>
-        {% for log in coach.logs %}
+        {% for log in logs %}
         <tr>
           <td>{% for teacher in log.teachers %}
                 {{ teacher.first_name }} {{ teacher.last_name }},

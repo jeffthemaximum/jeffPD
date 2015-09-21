@@ -3,7 +3,7 @@ from flask.ext.login import current_user, login_required
 from . import private
 from ..models import Teacher, CoachTeacherLink, Coach, Log, LogTeacherLink
 from ..models import LogTagLink, Tag
-from .forms import AddTeachersForm, CoachLogForm
+from .forms import AddTeachersForm, CoachLogForm, CoachSelectsTags
 from .forms import AdministratorSelectsTeachersForm, AdministratorSelectsCoachesForm
 from .. import db
 import pudb
@@ -112,13 +112,30 @@ def add_teachers():
     return render_template('private/coach/add.html', form=form)
 
 
-@private.route('/coach/view-logs')
+@private.route('/coach/select-search-params', methods=['GET', 'POST'])
 @login_required
-def view_coach_logs():
+def coach_selects_view_log_params():
+    if current_user.type != 'coach':
+        return redirect(url_for('main.pd_list'))
+
+    form = CoachSelectsTags()
+
+    if form.validate_on_submit():
+        return redirect(url_for(
+            'private.coach_views_logs',
+            tag=form.tags.data))
+    return render_template(
+        'private/coach/select-search-params.html',
+        form=form)
+
+
+@private.route('/coach/view-logs/<tag>')
+@login_required
+def coach_views_logs(tag):
     if current_user.type != 'coach':
         return redirect(url_for('main.pd_list'))
     coach = Coach.query.filter_by(email=current_user.email).first()
-    logs = Log.query.filter_by(coach_id=current_user.id).all()
+    logs = search_coach_logs_by_tag(coach.id, tag)
     return render_template(
         'private/coach/view-logs.html',
         coach=coach,

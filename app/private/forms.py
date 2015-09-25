@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form
-from wtforms import SelectMultipleField, SubmitField, widgets, TextAreaField, SelectField
+from wtforms import SelectMultipleField, SubmitField, widgets, TextAreaField, SelectField, BooleanField
 from wtforms.validators import Required
 from ..models import Teacher, Coach, Tag
 from flask.ext.login import current_user
@@ -38,6 +38,7 @@ class CoachLogForm(Form):
         coerce=int)
     body = TextAreaField('What\'d you do?')
     next = TextAreaField('Whatchu gonna do next?')
+    completed = BooleanField('Check if coaching is still in progress. Leave blank if completed.')
     tags = SelectMultipleField(
         'Tags',
         coerce=int)

@@ -20,6 +20,7 @@
           <th>What you did</th>
           <th>What you're doing next</th>
           <th>Tags</th>
+          <th>Completed?</th>
           <th>Send teacher a message about this?</th>
         </tr>
       </thead>
@@ -37,6 +38,7 @@
                 {{ tag.name }},
               {% endfor %}
           </td>
+          <td>{{ log.completed }}
           <td><a href="mailto:{{ coach.email }}">{{ coach.email }}</a></td>
         </tr>
         {% endfor %}

@@ -53,7 +53,8 @@ def coach_log():
             log = Log(
                 body=form.body.data,
                 next=form.next.data,
-                coach_id=curr_coach.id)
+                coach_id=curr_coach.id,
+                completed=form.completed.data)
 
             # connect teachers to log
             for teacher in teachers:

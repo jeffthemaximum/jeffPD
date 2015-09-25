@@ -38,7 +38,7 @@ class CoachLogForm(Form):
         coerce=int)
     body = TextAreaField('What\'d you do?')
     next = TextAreaField('Whatchu gonna do next?')
-    completed = BooleanField('Check if coaching is still in progress. Leave blank if completed.')
+    completed = BooleanField('Check if coaching is completed. Leave blank if still in progress.')
     tags = SelectMultipleField(
         'Tags',
         coerce=int)

@@ -143,6 +143,8 @@ class Log(db.Model):
     tags = db.relationship(
         'Tag',
         secondary='log_tag_link')
+    # create bool for status
+    completed = db.Column(db.Boolean, default=True, index=True)
 
 
 class LogTeacherLink(db.Model):

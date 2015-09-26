@@ -164,7 +164,7 @@ def get_log_teacher_ids(log):
         teacher_ids.append(teacher.id)
     return teacher_ids
 
-@private.route('/coach/edit-log/<log_id>')
+@private.route('/coach/edit-log/<log_id>', methods=['GET', 'POST'])
 @login_required
 def coach_edits_log(log_id):
     if current_user.type != 'coach':
@@ -180,7 +180,45 @@ def coach_edits_log(log_id):
         teachers=teacher_ids, 
         tags=tag_ids)
     if form.validate_on_submit():
-        pass
+        # get current coach
+        curr_coach = current_user
+
+        # get list of teachers by id from form
+        teachers_by_id = form.teachers.data
+
+        # instantiate list of teachers
+        teachers = []
+
+        # add teachers to list
+        for teacher in teachers_by_id:
+            teachers.append(Teacher.query.filter_by(id=teacher).first())
+
+        # create log
+        log = Log(
+            body=form.body.data,
+            next=form.next.data,
+            coach_id=curr_coach.id,
+            completed=form.completed.data)
+
+        # connect teachers to log
+        for teacher in teachers:
+            teacher_log = LogTeacherLink(
+                log=log,
+                teacher=teacher)
+            db.session.add(teacher_log)
+
+        # add tags
+        for tag_id in form.tags.data:
+            tag = Tag.query.filter_by(id=tag_id).first()
+            log_tag = LogTagLink(
+                log=log,
+                tag=tag)
+            db.session.add(log_tag)
+
+        db.session.add(log)
+        db.session.commit()
+        flash("Successfully updated log!")
+        return redirect(url_for('private.coach'))
     # form.teachers.data = log.teachers
     form.body.data = log.body
     form.next.data = log.next

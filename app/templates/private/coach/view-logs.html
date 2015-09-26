@@ -39,7 +39,7 @@
               {% endfor %}
           </td>
           <td>{{ log.completed }}
-          <td><a href="#" class="btn btn-primary">Edit/Delete Log</a></td>
+          <td><a href="{{ url_for('private.coach_edits_log', log_id=log.id) }}" class="btn btn-primary">Edit/Delete Log</a></td>
         </tr>
         {% endfor %}
     </table>

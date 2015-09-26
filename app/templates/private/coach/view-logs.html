@@ -21,7 +21,7 @@
           <th>What you're doing next</th>
           <th>Tags</th>
           <th>Completed?</th>
-          <th>Send teacher a message about this?</th>
+          <th>Edit or Delete this log?</th>
         </tr>
       </thead>
       <tbody>
@@ -39,7 +39,7 @@
               {% endfor %}
           </td>
           <td>{{ log.completed }}
-          <td><a href="mailto:{{ coach.email }}">{{ coach.email }}</a></td>
+          <td><a href="#" class="btn btn-primary">Edit/Delete Log</a></td>
         </tr>
         {% endfor %}
     </table>

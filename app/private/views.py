@@ -143,6 +143,56 @@ def coach_views_logs(tag):
         logs=logs)
 
 
+def get_ids_for_tags(tags):
+    tag_ids = []
+    for tag in tags:
+        tag_ids.append(tag.id)
+    return tag_ids
+
+
+def get_log_tags(log_id):
+    logtl = LogTagLink.query.filter_by(log_id=log_id).all()
+    tags = []
+    for logt in logtl:
+        tags.append(Tag.query.filter_by(id=logt.tag_id).first())
+    return tags
+
+
+def get_log_teacher_ids(log):
+    teacher_ids = []
+    for teacher in log.teachers:
+        teacher_ids.append(teacher.id)
+    return teacher_ids
+
+@private.route('/coach/edit-log/<log_id>')
+@login_required
+def coach_edits_log(log_id):
+    if current_user.type != 'coach':
+        return redirect(url_for('main.pd_list'))
+    log = Log.query.filter_by(id=log_id).first()
+    # get list of teacher id's
+    teacher_ids = get_log_teacher_ids(log)
+    # get list of tag id's
+    tags = get_log_tags(log_id)
+    tag_ids = get_ids_for_tags(tags)
+    # prepopulate form with tags and teachers
+    form = CoachLogForm(
+        teachers=teacher_ids, 
+        tags=tag_ids)
+    if form.validate_on_submit():
+        pass
+    # form.teachers.data = log.teachers
+    form.body.data = log.body
+    form.next.data = log.next
+    form.completed.data = log.completed
+    # form.tags.data = get_log_tags(log_id)
+    return render_template(
+        'private/coach/edit-log.html',
+        form=form,
+        log=log)
+
+
+
 @private.route('/teacher')
 @login_required
 def teacher():

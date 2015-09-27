@@ -164,6 +164,45 @@ def get_log_teacher_ids(log):
         teacher_ids.append(teacher.id)
     return teacher_ids
 
+
+def remove_teachers_from_log(teachers, log):
+    # need to iterate across logtl and remove all logtl's with log_id = log.id
+    log_id = log.id
+    for teacher in log.teachers:
+        logtl = LogTeacherLink.query.filter_by(log_id=log_id).first()
+        db.session.delete(logtl)
+        db.session.commit()
+    return True
+
+
+def add_teachers_to_log(teachers_by_id, log):
+    for teacher in teachers_by_id:
+        teacher = Teacher.query.filter_by(id=teacher).first()
+        teacher_log = LogTeacherLink(
+            log=log,
+            teacher=teacher)
+        db.session.add(teacher_log)
+        db.session.commit()
+    return True
+
+
+def remove_tags_from_log(tags, log):
+    log_id = log.id
+    for tag in log.tags:
+        tag_id = tag.id
+        logtaglink = LogTagLink.query.filter_by(log_id=log_id).first()
+        db.session.delete(logtaglink)
+        db.session.commit()
+
+
+def add_tags_to_log(tags_by_id, log):
+    for tag in tags_by_id:
+        tag = Tag.query.filter_by(id=tag).first()
+        tag_log = LogTagLink(
+            log=log,
+            tag=tag)
+        db.session.add(tag_log)
+
 @private.route('/coach/edit-log/<log_id>', methods=['GET', 'POST'])
 @login_required
 def coach_edits_log(log_id):
@@ -180,8 +219,14 @@ def coach_edits_log(log_id):
         teachers=teacher_ids, 
         tags=tag_ids)
     if form.validate_on_submit():
+
         # get current coach
         curr_coach = current_user
+
+        # update log
+        log.body = form.body.data
+        log.next = form.next.data
+        log.completed = form.completed.data
 
         # get list of teachers by id from form
         teachers_by_id = form.teachers.data
@@ -193,27 +238,36 @@ def coach_edits_log(log_id):
         for teacher in teachers_by_id:
             teachers.append(Teacher.query.filter_by(id=teacher).first())
 
-        # create log
-        log = Log(
-            body=form.body.data,
-            next=form.next.data,
-            coach_id=curr_coach.id,
-            completed=form.completed.data)
+        teachers.sort()
+        log.teachers.sort()
+        # check if form teachers != log.teachers
+        if (teachers != log.teachers):
+            # disconnect old teachers from log
+            remove_teachers_from_log(teachers, log)
 
-        # connect teachers to log
-        for teacher in teachers:
-            teacher_log = LogTeacherLink(
-                log=log,
-                teacher=teacher)
-            db.session.add(teacher_log)
+            # add new teachers
+            add_teachers_to_log(teachers_by_id, log)
 
-        # add tags
-        for tag_id in form.tags.data:
-            tag = Tag.query.filter_by(id=tag_id).first()
-            log_tag = LogTagLink(
-                log=log,
-                tag=tag)
-            db.session.add(log_tag)
+        #get list of tags by if from form
+        tags_by_id = form.tags.data
+
+        # instantiae list of tags
+        tags = []
+
+        # add tags to list
+        for tag in tags_by_id:
+            tags.append(Tag.query.filter_by(id=tag).first())
+
+        tags.sort()
+        log.tags.sort()
+        # check if form tags != log.tags
+        if (tags != log.tags):
+
+            # disconnect old tags from log
+            remove_tags_from_log(log.tags, log)
+
+            # add new tags
+            add_tags_to_log(tags_by_id, log)
 
         db.session.add(log)
         db.session.commit()

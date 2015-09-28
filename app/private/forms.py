@@ -67,7 +67,7 @@ class CoachSelectsTags(Form):
         default=(0, ''))
     completed = SelectField(
         u'Search by complete. Leave blank to view all logs.',
-        choices=[('0', ''), ('1', 'Done'), ('2', 'In Progress')],
+        choices=[(0, ''), (1, 'Done'), (2, 'In Progress')],
         coerce=int,
         default=(0, ''))
     submit = SubmitField('Submit')

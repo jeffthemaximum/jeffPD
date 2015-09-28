@@ -22,9 +22,9 @@ def search_by_tag(coach, tag_id):
 
 
 def search_by_completed(coach, completed):
+    completed = True if completed == '1' else False
     logs = Log.query.filter_by(
         coach_id=coach.id).filter_by(completed=completed).all()
-    logs = reversed(logs)
     return logs
 
 
@@ -33,6 +33,7 @@ def search_by_tag_and_completed(coach, tag_id, completed):
     # filter by tag
     logs = search_by_tag(coach, tag_id)
     # filter by completed
+    completed = True if completed == '1' else False
     for log in logs:
         if log.completed == completed:
             return_logs.append(log)
@@ -48,14 +49,14 @@ def search_all_coach_logs(coach):
 def search_coach_logs(coach_id, tag_id, completed):
     coach_id = int(coach_id)
     coach = Coach.query.filter_by(id=coach_id).first()
-    if tag_id == '0' and completed == '0':
-        logs = search_all_coach_logs(coach)
-    elif tag_id == '0':
+    if tag_id != '0' and completed != '0':
+        logs = search_by_tag_and_completed(coach, tag_id, completed)
+    elif tag_id != '0':
         logs = search_by_tag(coach, tag_id)
-    elif completed == '0':
+    elif completed != '0':
         logs = search_by_completed(coach, completed)
     else:
-        logs = search_by_tag_and_completed(coach, tag_id, completed)
+        logs = search_all_coach_logs(coach)
     return logs
 
 
@@ -170,7 +171,7 @@ def coach_views_logs(tag, completed):
     if current_user.type != 'coach':
         return redirect(url_for('main.pd_list'))
     coach = Coach.query.filter_by(email=current_user.email).first()
-    logs = search_coach_logs(coach.id, tag.id, completed)
+    logs = search_coach_logs(coach.id, tag, completed)
     return render_template(
         'private/coach/view-logs.html',
         coach=coach,

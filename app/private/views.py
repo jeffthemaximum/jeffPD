@@ -193,6 +193,7 @@ def remove_tags_from_log(tags, log):
         logtaglink = LogTagLink.query.filter_by(log_id=log_id).first()
         db.session.delete(logtaglink)
         db.session.commit()
+    return True
 
 
 def add_tags_to_log(tags_by_id, log):
@@ -202,6 +203,8 @@ def add_tags_to_log(tags_by_id, log):
             log=log,
             tag=tag)
         db.session.add(tag_log)
+    return True
+
 
 @private.route('/coach/edit-log/<log_id>', methods=['GET', 'POST'])
 @login_required
@@ -283,6 +286,24 @@ def coach_edits_log(log_id):
         form=form,
         log=log)
 
+
+@private.route('/coach/delete-log/<log_id>', methods=['GET', 'POST'])
+@login_required
+def coach_deletes_log(log_id):
+    # need to check if log belongs to coach here!!!!
+    log = Log.query.filter_by(id=log_id).first()
+    remove_teachers_from_log(log.teachers, log)
+    remove_tags_from_log(log.tags, log)
+    # logteacherlink = LogTeacherLink.query.filter_by(log=log).first()
+    # db.session.delete(logteacherlink)
+    # db.session.commit()
+    # logtaglink = LogTagLink.query.filter_by(log=log).first()
+    # db.session.delete(logtaglink)
+    # db.session.commit()
+    db.session.delete(log)
+    db.session.commit()
+    flash("Successfully deleted log!")
+    return redirect(url_for('private.coach'))    
 
 
 @private.route('/teacher')

@@ -4,25 +4,58 @@ from . import private
 from ..models import Teacher, CoachTeacherLink, Coach, Log, LogTeacherLink
 from ..models import LogTagLink, Tag
 from .forms import AddTeachersForm, CoachLogForm, CoachSelectsTags
-from .forms import AdministratorSelectsTeachersForm, AdministratorSelectsCoachesForm
+from .forms import AdministratorSelectsTeachersForm
+from .forms import AdministratorSelectsCoachesForm
 from .. import db
 import pudb
 
 
-def search_coach_logs_by_tag(coach_id, tag_id):
+def search_by_tag(coach, tag_id):
+    coach_logs = []
+    tag = Tag.query.filter_by(id=tag_id).first()
+    for log in tag.logs:
+        if log.coach_id == coach.id:
+            coach_logs.append(log)
+    logs = coach_logs
+    logs = reversed(logs)
+    return logs
+
+
+def search_by_completed(coach, completed):
+    logs = Log.query.filter_by(
+        coach_id=coach.id).filter_by(completed=completed).all()
+    logs = reversed(logs)
+    return logs
+
+
+def search_by_tag_and_completed(coach, tag_id, completed):
+    return_logs = []
+    # filter by tag
+    logs = search_by_tag(coach, tag_id)
+    # filter by completed
+    for log in logs:
+        if log.completed == completed:
+            return_logs.append(log)
+    return return_logs
+
+
+def search_all_coach_logs(coach):
+    logs = coach.logs.order_by(Log.timestamp).all()
+    logs = reversed(logs)
+    return logs
+
+
+def search_coach_logs(coach_id, tag_id, completed):
     coach_id = int(coach_id)
     coach = Coach.query.filter_by(id=coach_id).first()
-    if tag_id == '0':
-        logs = coach.logs.order_by(Log.timestamp).all()
-        logs = reversed(logs)
+    if tag_id == '0' and completed == '0':
+        logs = search_all_coach_logs(coach)
+    elif tag_id == '0':
+        logs = search_by_tag(coach, tag_id)
+    elif completed == '0':
+        logs = search_by_completed(coach, completed)
     else:
-        coach_logs = []
-        tag = Tag.query.filter_by(id=tag_id).first()
-        for log in tag.logs:
-            if log.coach_id == coach_id:
-                coach_logs.append(log)
-        logs = coach_logs
-        logs = reversed(logs)
+        logs = search_by_tag_and_completed(coach, tag_id, completed)
     return logs
 
 
@@ -124,19 +157,20 @@ def coach_selects_view_log_params():
     if form.validate_on_submit():
         return redirect(url_for(
             'private.coach_views_logs',
-            tag=form.tags.data))
+            tag=form.tags.data,
+            completed=form.completed.data))
     return render_template(
         'private/coach/select-search-params.html',
         form=form)
 
 
-@private.route('/coach/view-logs/<tag>')
+@private.route('/coach/view-logs/<tag>/<completed>')
 @login_required
-def coach_views_logs(tag):
+def coach_views_logs(tag, completed):
     if current_user.type != 'coach':
         return redirect(url_for('main.pd_list'))
     coach = Coach.query.filter_by(email=current_user.email).first()
-    logs = search_coach_logs_by_tag(coach.id, tag)
+    logs = search_coach_logs(coach.id, tag.id, completed)
     return render_template(
         'private/coach/view-logs.html',
         coach=coach,
@@ -189,7 +223,6 @@ def add_teachers_to_log(teachers_by_id, log):
 def remove_tags_from_log(tags, log):
     log_id = log.id
     for tag in log.tags:
-        tag_id = tag.id
         logtaglink = LogTagLink.query.filter_by(log_id=log_id).first()
         db.session.delete(logtaglink)
         db.session.commit()
@@ -219,12 +252,12 @@ def coach_edits_log(log_id):
     tag_ids = get_ids_for_tags(tags)
     # prepopulate form with tags and teachers
     form = CoachLogForm(
-        teachers=teacher_ids, 
+        teachers=teacher_ids,
         tags=tag_ids)
     if form.validate_on_submit():
 
         # get current coach
-        curr_coach = current_user
+        # curr_coach = current_user
 
         # update log
         log.body = form.body.data
@@ -251,7 +284,7 @@ def coach_edits_log(log_id):
             # add new teachers
             add_teachers_to_log(teachers_by_id, log)
 
-        #get list of tags by if from form
+        # get list of tags by if from form
         tags_by_id = form.tags.data
 
         # instantiae list of tags
@@ -303,7 +336,7 @@ def coach_deletes_log(log_id):
     db.session.delete(log)
     db.session.commit()
     flash("Successfully deleted log!")
-    return redirect(url_for('private.coach'))    
+    return redirect(url_for('private.coach'))
 
 
 @private.route('/teacher')
@@ -355,7 +388,7 @@ def adminstrator_selects_coaches():
         return redirect(url_for(
             'private.administrator_views_coach_logs',
             coach_id=form.coach.data,
-            tag = form.tags.data))
+            tag=form.tags.data))
     return render_template(
         'private/administrator/select-coaches.html',
         form=form)
@@ -364,15 +397,16 @@ def adminstrator_selects_coaches():
 @private.route('/administrator/coach-logs/<coach_id>/<tag>')
 @login_required
 def administrator_views_coach_logs(coach_id, tag):
-    if current_user.type != 'administrator':
-        return redirect(url_for('main.pd_list'))
-    # query db for coach
-    coach = Coach.query.filter_by(id=coach_id).first()
-    logs = search_coach_logs_by_tag(coach_id, tag)
-    return render_template(
-        'private/administrator/coach-logs.html',
-        coach=coach,
-        logs=logs)
+    pass
+    # if current_user.type != 'administrator':
+    #     return redirect(url_for('main.pd_list'))
+    # # query db for coach
+    # coach = Coach.query.filter_by(id=coach_id).first()
+    # logs = search_coach_logs_by_tag(coach_id, tag)
+    # return render_template(
+    #     'private/administrator/coach-logs.html',
+    #     coach=coach,
+    #     logs=logs)
 
 
 @private.route('/administrator/select-teachers', methods=['GET', 'POST'])

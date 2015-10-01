@@ -38,3 +38,10 @@ def pd_three():
     if current_user.is_authenticated() is not True:
         flash("Unlock super cool extras features by logging in or registering. You can do this by clicking 'Login' in the header!")
     return render_template('/pd_content/2015_9_8_drive_folders.html')
+
+
+@main.route('/pd_content/class_site')
+def pd_four():
+    if current_user.is_authenticated() is not True:
+            flash("Unlock super cool extras features by logging in or registering. You can do this by clicking 'Login' in the header!")
+    return render_template('/pd_content/2015_10_1_class_website.html')

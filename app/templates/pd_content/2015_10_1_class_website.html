@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}JeffPD{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Hello, {% if current_user.is_authenticated() %}{{ current_user.first_name }}{% else %}Stranger{% endif %}!</h1>
+    <h2>Build Your Own Class Website!</h2>
+</div>
+<div class='container'>
+<!-- 
+    <h4>By the end of this PD, you will:</h4>
+    <ul>
+        <li>Learn what Google Drive is.</li>
+        <li>Understand why Google Drive folders are helpful.</li>
+        <li>Use folder to organize your Google Drive.</li>
+    </ul>
+    <br> -->
+
+
+    <h4>Here's what you need to know:</h4>
+    <ul>
+        <li>Class websites are super useful. You can make one even if you're a tech newb.</li>
+        <li>An easy way to make a website is with <a href="https://www.blogger.com/home" target="_blank">Blogger</a>.</li>
+        <li>Use <a href="https://sites.google.com" target="_blank">Google Sites</a> if you want a more customized class site.</li>
+    </ul>
+    <div class="container" id="pd-pics">
+        <a href="http://cs50apnyc.com/" target="_blank"><img src="{{ url_for('static', filename='img/class_site.png') }}"></a>
+    </div>
+    <p>Here's a preview of my current class site. Click the pic to checkout the full version!</p>
+    <p>There's two parts to this tutorial. Part 1 teaches you about why you should make a website, and part 1 teaches a little bit about how mine works. Part 2 teaches you how to make your website. If you just want to skip to part 2, that's OK, <a href="http://img.pandawhale.com/post-50678-Colbert-now-go-away-I-wanna-ea-0vmV.gif" target="_blank"> it won't hurt my feelings!</a></p>
+    <br>
+    <h4>PART 1: Why are class websites useful? How does Mr. Maxim's site work?</h4>
+    <p>Why don't you check out some example class websites before you get started:</p>
+    <ul>
+        <li><a href="http://cs50apnyc.com/" target="_blank">Here's my current class website</a>.</li>
+        <li><a href="http://www.mrmaxim.org/" target="_blank">Here's my website from last year</a>.</li>
+        <li><a href="http://maximial.blogspot.com/" target="_blank">Here's my class site from two years ago</a>.</li>
+    </ul>
+    <p>First, {% if current_user.is_authenticated() %}{{ current_user.first_name }}{% else %}Stranger{% endif %}, recognize that making your own website takes some work and some learning. But, once you get it rolling, it actually makes your teaching life much, much easier. <a href="https://docs.google.com/drawings/d/1IvUDFKCZnL6iM80DsIWihHdzVP4JMG1yq8E-rjl1Kcg/edit?usp=sharing" target="_blank">Here's a picture</a> I use to demonstrate this idea.</p>
+    <p>How does a website make your life much, much easier? By streamlining the process of getting information to/from students, communicating with parents, and documenting your teaching for admins. <a href="https://docs.google.com/drawings/d/1bQN8KXGM50wTHqQ4jlM20Vl-tn8lQtJTgqHz7o32v5U/edit?usp=sharing" target="_blank">Here's another awesome picture to demonstrate that</a>!</p>
+    <p><a href="http://www.mrmaxim.org/">Next, checkout my website I used last school year</a>. The "Weekly Topics of Study" section on the left hand side of the page is where I list every class and every assignment for the whole year.</p>
+    <p>Sometimes, students complete their work right on the website, such as in <a href="https://docs.google.com/a/mrmaxim.org/forms/d/1teEUh2wCiuxcKetv4ZQs368vrwHsWLPUdxpmoaGpxhA/viewform?c=0&amp;w=1&amp;usp=send_form" target="_blank">Week 17, Lesson 2</a>. Other times, when students don't use computers in class, I'll still put that day's assignment on my website. An example of this is <a href="https://sites.google.com/site/mrmaximial/weekly/08---inwood-academy/lesson-1---history-culture" target="_blank">Week 8, Lesson 1</a>,  a lesson in which we mostly had lecture and discussions, but I still listed that day's PowerPoint on my website.</p>
+    <p>There's also a whole bunch of other benefits, <a href="http://www.jeffreymaxim.com/3-ways-edtech-makes-my-life-easier/" target="_blank" rel="nofollow">which you can read about here</a>.</p>
+    <br>
+    <h4>PART 2: How do I make my website?</h4>
+    <p>OK, {% if current_user.is_authenticated() %}{{ current_user.first_name }}{% else %}Stranger{% endif %}, there's an easy way to make a website, and a slightly harder (but still pretty easy) way to make a website. If you make the easy website, <a href="http://maximial.blogspot.com/2013_04_01_archive.html" target="_blank" rel="nofollow">your website will look like my website from a couple years ago</a>. If you make the hard website, you'll make a website that looks just like <a href="http://www.mrmaxim.org/" target="_blank">my website from last year</a>.</p>
+    <b>Making the easy website...</b>
+    <p>To make the easy website, <a href="http://www.jeffreymaxim.com/make-your-own-class-or-teacher-website-in-less-than-10-minutes/" target="_blank" rel="nofollow">click here and follow the directions</a>.</p>
+    <b>Making the hard website...</b>
+    <p>This website will involve <a href="http://sites.google.com" target="_blank" rel="nofollow">Google Sites</a>, so head on over there now in a new tab. You'll have to login with a Google Account, so make one if you don't have one. You can use your personal account, or you could also use your mrmaxim.org Google Account, if you know how to do that.</p>
+    <p>There's no step-by-step, no-fail guide for making a class website like mine, it's going to involve a decent amount of self-exploration and experimentation on your part to make this website. Don't be scared: trying and failing and trying again is how you get better at using all technology! However, here's some tips to help you along the way...</p>
+    <ul>
+        <li>Once into Google Sites, click on the big red "CREATE" button in the top left of your screen to get started.</li>
+        <li>On the next screen, choose the option to "browse the gallery for more" templates. Choose the "Classroom Site" template. It's the best, IMO.</li>
+        <li>Once you've picked your template, click the big red "CREATE SITE" button, and you've made your site!</li>
+        <li>ow you have to customize this template with your information. This is where you'll have to explore and discover on your own. There's tips around the outside of your template to help you figure out how to customize your site.</li>
+    </ul>
+    <br>
+    <h4>The End!</h4>
+    <br>
+    <br>
+    <p>ps. If you've read this far, thanks, {% if current_user.is_authenticated() %}{{ current_user.first_name }}{% else %}Stranger{% endif %}! As a bonus surprise, check out this awesome picture of me and my neice...</p>
+    <br>
+    <img src="{{ url_for('static', filename='img/jeff_lisa.jpg') }}">
+    <br>
+    <h4>Did I just make your day? Ruin it? Let me know! <a href="mailto:frey.maxim@gmail.com">Jeff Maxim</a> <h4>
+</div>
+{% endblock %}

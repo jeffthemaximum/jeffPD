@@ -17,6 +17,7 @@
           <th>Date / Time</th>
           <th>What you did</th>
           <th>What you're doing next</th>
+          <th>Minutes logged</th>
           <th>Tags</th>
           <th>Completed?</th>
         </tr>
@@ -30,6 +31,7 @@
           <td>{{ log.timestamp.strftime("%Y-%m-%d %H:%M") }}</td>
           <td id="log-body">{{ log.body }}</td>
           <td>{{ log.next }}</td>
+          <th> {{ log.time }}</td>
           <td>{% for tag in log.tags %}
                 {{ tag.name }},
               {% endfor %}

@@ -88,7 +88,8 @@ def coach_log():
                 body=form.body.data,
                 next=form.next.data,
                 coach_id=curr_coach.id,
-                completed=form.completed.data)
+                completed=form.completed.data,
+                time=form.time.data)
 
             # connect teachers to log
             for teacher in teachers:
@@ -264,6 +265,7 @@ def coach_edits_log(log_id):
         log.body = form.body.data
         log.next = form.next.data
         log.completed = form.completed.data
+        log.time = form.time.data
 
         # get list of teachers by id from form
         teachers_by_id = form.teachers.data
@@ -285,7 +287,7 @@ def coach_edits_log(log_id):
             # add new teachers
             add_teachers_to_log(teachers_by_id, log)
 
-        # get list of tags by if from form
+        # get list of tags by id from form
         tags_by_id = form.tags.data
 
         # instantiae list of tags
@@ -314,6 +316,7 @@ def coach_edits_log(log_id):
     form.body.data = log.body
     form.next.data = log.next
     form.completed.data = log.completed
+    form.time.data = log.time
     # form.tags.data = get_log_tags(log_id)
     return render_template(
         'private/coach/edit-log.html',

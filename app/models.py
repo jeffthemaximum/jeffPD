@@ -145,6 +145,7 @@ class Log(db.Model):
         secondary='log_tag_link')
     # create bool for status, True means completed
     completed = db.Column(db.Boolean, default=True, index=True)
+    time = db.Column(db.Integer)
 
 
 class LogTeacherLink(db.Model):

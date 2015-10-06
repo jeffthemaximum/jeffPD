@@ -1,6 +1,6 @@
 from flask.ext.wtf import Form
 from wtforms import SelectMultipleField, SubmitField, widgets, TextAreaField
-from wtforms import SelectField, BooleanField
+from wtforms import SelectField, BooleanField, IntegerField
 from wtforms.validators import Required
 from ..models import Teacher, Coach, Tag
 from flask.ext.login import current_user
@@ -45,6 +45,7 @@ class CoachLogForm(Form):
     tags = SelectMultipleField(
         'Tags',
         coerce=int)
+    time = IntegerField('For how many minutes did you work on this?')
     submit = SubmitField('Submit')
 
     def __init__(self, *args, **kwargs):

@@ -45,3 +45,10 @@ def pd_four():
     if current_user.is_authenticated() is not True:
             flash("Unlock super cool extras features by logging in or registering. You can do this by clicking 'Login' in the header!")
     return render_template('/pd_content/2015_10_1_class_website.html')
+
+
+@main.route('/pd_content/convert_files')
+def pd_five():
+    if current_user.is_authenticated() is not True:
+            flash("Unlock super cool extras features by logging in or registering. You can do this by clicking 'Login' in the header!")
+    return render_template('/pd_content/2015_10_10_convert_files.html')

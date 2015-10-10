@@ -343,6 +343,12 @@ def coach_deletes_log(log_id):
     return redirect(url_for('private.coach'))
 
 
+@private.route('/coach/to-do', methods=['GET', 'POST'])
+@login_required
+def coach_views_incomplete_logs():
+    pass
+
+
 @private.route('/teacher')
 @login_required
 def teacher():

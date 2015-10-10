@@ -15,6 +15,7 @@
     <tr>
       <th>Add Teachers</th>
       <th>Log Coaching</th>
+      <th>View Incomplete Coaching Tasks</th>
       <th>View My Coaching Logs</th>
     </tr>
   </thead>
@@ -22,8 +23,12 @@
     <tr>
       <td><a href="{{ url_for('private.add_teachers') }}">Add Teachers</a></td>
       <td><a href="{{ url_for('private.coach_log') }}">Log Coaching</a></td>
+      <td><a href="{{ url_for('private.coach_views_incomplete_logs') }}">View Incomplete Coaching Tasks</a></td>
       <td><a href="{{ url_for('private.coach_selects_view_log_params') }}">View My Logs</a></td>
     </tr>
   </tbody>
 </table>
+<div class="container" id="gif">
+  <img src="{{ url_for('static', filename='img/coach.gif') }}">
+</div>
 {% endblock %}

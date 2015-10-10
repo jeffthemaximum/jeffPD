@@ -80,6 +80,22 @@ class CoachSelectsTags(Form):
         self.tags.choices = [(tag.id, tag.name) for tag in tags]
 
 
+class CoachSearchesToDos(Form):
+    tags = SelectField(
+        'Search by Tag. Leave blank to view all logs.',
+        coerce=int,
+        default=(0, ''))
+    # add choice for initializing coach
+    # add date range
+    submit = SubmitField('Submit')
+
+    def __init__(self, *args, **kwargs):
+        super(CoachSearchesToDos, self).__init__(*args, **kwargs)
+        # populates the role select field choices
+        tags = Tag.query.order_by(Tag.id).all()
+        self.tags.choices = [(tag.id, tag.name) for tag in tags]
+
+
 class AdministratorSelectsCoachesForm(Form):
     coach = SelectField(
         "Which coach\'s logs do you wanna see?",

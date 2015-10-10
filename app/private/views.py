@@ -5,7 +5,7 @@ from ..models import Teacher, CoachTeacherLink, Coach, Log, LogTeacherLink
 from ..models import LogTagLink, Tag
 from .forms import AddTeachersForm, CoachLogForm, CoachSelectsTags
 from .forms import AdministratorSelectsTeachersForm
-from .forms import AdministratorSelectsCoachesForm
+from .forms import AdministratorSelectsCoachesForm, CoachSearchesToDos
 from .. import db
 import pudb
 
@@ -343,10 +343,28 @@ def coach_deletes_log(log_id):
     return redirect(url_for('private.coach'))
 
 
-@private.route('/coach/to-do', methods=['GET', 'POST'])
+@private.route('/coach/search-to-dos', methods=['GET', 'POST'])
 @login_required
-def coach_views_incomplete_logs():
-    pass
+def coach_searches_to_dos():
+    if current_user.type != 'coach':
+        return redirect(url_for('main.pd_list'))
+
+    form = CoachSearchesToDos()
+
+    if form.validate_on_submit():
+        return redirect(url_for(
+            'private.coach_views_logs',
+            tag=form.tags.data,
+            completed=2))
+    return render_template(
+        'private/coach/select-search-params.html',
+        form=form)
+
+
+# @private.route('/coach/to-do', methods=['GET', 'POST'])
+# @login_required
+# def coach_views_incomplete_logs():
+#     return redirect(url_for('private.coach_views_logs', tag=0, completed=2))
 
 
 @private.route('/teacher')

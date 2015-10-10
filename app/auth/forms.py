@@ -56,6 +56,18 @@ class RegistrationForm(Form):
             raise ValidationError('Username already in use.')
 
 
+class SelectCoachTypeForm(Form):
+    coach_type = SelectField(
+        'What subject do you coach?',
+        choices=[
+            ('tech', 'Tech'),
+            ('math', 'Math'),
+            ('humanities', 'Humanities'),
+            ('special_ed', 'Special Education')],
+        validators=[Required()])
+    submit = SubmitField('Register')
+
+
 class PasswordResetForm(Form):
     email = StringField('Email', validators=[Required(), Length(1, 64),
                                              Email()])

@@ -5,7 +5,7 @@ from .. import db
 from ..models import User, Teacher, Coach, Administrator
 from ..email import send_email
 from .forms import LoginForm, RegistrationForm, PasswordResetForm, \
-    PasswordResetRequestForm
+    PasswordResetRequestForm, SelectCoachTypeForm
 
 
 admin_email = 'frey.maxim@gmail.com'
@@ -31,6 +31,19 @@ def logout():
     return redirect(url_for('main.index'))
 
 
+@auth.route('/extra_questions/<coach_id>', methods=['GET', 'POST'])
+def extra_questions(coach_id):
+    form = SelectCoachTypeForm()
+    coach = Coach.query.filter_by(id=coach_id).first()
+    if form.validate_on_submit():
+        coach.coach_type = form.coach_type.data
+        db.session.add(coach)
+        db.session.commit()
+        flash('You can now login.')
+        return redirect(url_for('auth.login'))
+    return render_template('auth/extra_questions.html', form=form, coach=coach)
+
+
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
@@ -46,6 +59,14 @@ def register():
                 school_id=form.school.data)
             db.session.add(teacher)
             user = teacher
+            send_email(
+                admin_email,
+                "New User at JeffPD",
+                'mail/new_user',
+                user=user)
+            db.session.commit()
+            flash('You can now login.')
+            return redirect(url_for('auth.login'))
         # if registrant selects coach role, create new coach
         elif form.role.data == 'coach':
             coach = Coach(
@@ -56,8 +77,18 @@ def register():
                 last_name=form.last_name.data.capitalize(),
                 school_id=form.school.data)
             db.session.add(coach)
+            db.session.commit()
             user = coach
-        elif form.role.data == 'administrator':
+            send_email(
+                admin_email,
+                "New User at JeffPD",
+                'mail/new_user',
+                user=user)
+            flash('Just a couple more questions.')
+            return redirect(url_for(
+                'auth.extra_questions',
+                 coach_id=coach.id))
+        else:
             admin = Administrator(
                 email=form.email.data.lower(),
                 username=form.username.data,
@@ -67,14 +98,15 @@ def register():
                 school_id=form.school.data)
             db.session.add(admin)
             user = admin
-        send_email(
-            admin_email,
-            "New User at JeffPD",
-            'mail/new_user',
-            user=user)
-        db.session.commit()
-        flash('You can now login.')
-        return redirect(url_for('auth.login'))
+            send_email(
+                admin_email,
+                "New User at JeffPD",
+                'mail/new_user',
+                user=user)
+            db.session.commit()
+            flash('You can now login.')
+            return redirect(url_for('auth.login'))
+
     return render_template('auth/register.html', form=form)
 
 

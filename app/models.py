@@ -106,6 +106,8 @@ class Coach(User):
     )
     # coaches have one school
     school_id = db.Column(db.Integer, db.ForeignKey('schools.id'))
+    # type (current choices are tech, math, humanities, special ed)
+    coach_type = db.Column(db.String(64))
 
 
 class Administrator(User):

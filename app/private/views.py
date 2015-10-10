@@ -18,7 +18,8 @@ def search_by_tag(coach, tag_id):
         if log.coach_id == coach.id:
             coach_logs.append(log)
     logs = coach_logs
-    logs = reversed(logs)
+
+    logs = sorted(logs, key=lambda x: x.timestamp_created, reverse=True)
     return logs
 
 

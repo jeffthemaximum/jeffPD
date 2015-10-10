@@ -313,6 +313,7 @@ def update_log(log, form, current_user):
     log.next = form.next.data
     log.completed = form.completed.data
     log.time = form.time.data
+    log.coach = curr_coach
 
     # update teachers
     update_teachers_on_log(form, log)
@@ -391,6 +392,35 @@ def coach_deletes_log(log_id):
     return redirect(url_for('private.coach'))
 
 
+@private.route('/coach/view-all-logs/<tag>/<completed>')
+@login_required
+def coach_views_all_logs(tag, completed):
+    if current_user.type != 'coach':
+        return redirect(url_for('main.pd_list'))
+    curr_coach = Coach.query.filter_by(email=current_user.email).first()
+    logs = Log.query.order_by(Log.timestamp_created).all()
+    all_logs = []
+    for log in logs:
+
+        if (log.completed == False):
+            if tag == '0':
+                coach_id = log.coach_id
+                coach = Coach.query.filter_by(id=coach_id).first()
+                if (coach.coach_type == curr_coach.coach_type):
+                    all_logs.append(log)
+            else:
+                curr_tag = Tag.query.filter_by(id=tag).first()
+                coach_id = log.coach_id
+                coach = Coach.query.filter_by(id=coach_id).first()
+                if (coach.coach_type == curr_coach.coach_type and (curr_tag in log.tags)):
+                    all_logs.append(log)
+    all_logs = reversed(all_logs)
+    return render_template(
+        'private/coach/view-logs.html',
+        coach=coach,
+        logs=all_logs)
+
+
 @private.route('/coach/search-to-dos', methods=['GET', 'POST'])
 @login_required
 def coach_searches_to_dos():
@@ -401,7 +431,7 @@ def coach_searches_to_dos():
 
     if form.validate_on_submit():
         return redirect(url_for(
-            'private.coach_views_logs',
+            'private.coach_views_all_logs',
             tag=form.tags.data,
             completed=2))
     return render_template(

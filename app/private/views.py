@@ -61,7 +61,7 @@ def search_coach_logs(coach_id, tag_id, completed):
     return logs
 
 
-def create_log(curr_coach, form, timestamp_completed=None, complete=True, timestamp_created=datetime.utcnow()):
+def create_log(curr_coach, form, timestamp_completed=None, completed=True):
     # get current coach
     curr_coach = current_user
 
@@ -81,8 +81,7 @@ def create_log(curr_coach, form, timestamp_completed=None, complete=True, timest
         next=form.next.data,
         coach_id=curr_coach.id,
         completed=form.completed.data,
-        time=form.time.data,
-        timestamp_created=timestamp_created)
+        time=form.time.data)
 
     # connect teachers to log
     for teacher in teachers:
@@ -100,7 +99,7 @@ def create_log(curr_coach, form, timestamp_completed=None, complete=True, timest
         db.session.add(log_tag)
 
     # if changed from complete to incomplete
-    if complete != False:
+    if completed != False:
         # add timestamp_completed
         timestamp_completed_plus_time = timestamp_completed + timedelta(minutes=form.time.data)
         log.timestamp_completed = timestamp_completed_plus_time
@@ -124,7 +123,7 @@ def coach_log():
             else:
                 create_log(current_user, 
                     form, 
-                    complete=False)
+                    completed=False)
             flash("Successfully added log!")
             return redirect(url_for('private.coach_log'))
         return render_template('private/coach/log.html', form=form)

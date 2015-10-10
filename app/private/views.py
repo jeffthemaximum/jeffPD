@@ -8,6 +8,7 @@ from .forms import AdministratorSelectsTeachersForm
 from .forms import AdministratorSelectsCoachesForm, CoachSearchesToDos
 from .. import db
 import pudb
+from datetime import datetime, timedelta
 
 
 def search_by_tag(coach, tag_id):
@@ -60,6 +61,54 @@ def search_coach_logs(coach_id, tag_id, completed):
     return logs
 
 
+def create_log(curr_coach, form, timestamp_completed=None, complete=True, timestamp_created=datetime.utcnow()):
+    # get current coach
+    curr_coach = current_user
+
+    # get list of teachers by id from form
+    teachers_by_id = form.teachers.data
+
+    # instantiate list of teachers
+    teachers = []
+
+    # add teachers to list
+    for teacher in teachers_by_id:
+        teachers.append(Teacher.query.filter_by(id=teacher).first())
+
+    # create log
+    log = Log(
+        body=form.body.data,
+        next=form.next.data,
+        coach_id=curr_coach.id,
+        completed=form.completed.data,
+        time=form.time.data,
+        timestamp_created=timestamp_created)
+
+    # connect teachers to log
+    for teacher in teachers:
+        teacher_log = LogTeacherLink(
+            log=log,
+            teacher=teacher)
+        db.session.add(teacher_log)
+
+    # add tags
+    for tag_id in form.tags.data:
+        tag = Tag.query.filter_by(id=tag_id).first()
+        log_tag = LogTagLink(
+            log=log,
+            tag=tag)
+        db.session.add(log_tag)
+
+    # if changed from complete to incomplete
+    if complete != False:
+        # add timestamp_completed
+        timestamp_completed_plus_time = timestamp_completed + timedelta(minutes=form.time.data)
+        log.timestamp_completed = timestamp_completed_plus_time
+
+    db.session.add(log)
+    db.session.commit()
+
+
 @private.route('/coach/log', methods=['GET', 'POST'])
 @login_required
 def coach_log():
@@ -70,47 +119,14 @@ def coach_log():
     else:
         form = CoachLogForm()
         if form.validate_on_submit():
-            # get current coach
-            curr_coach = current_user
-
-            # get list of teachers by id from form
-            teachers_by_id = form.teachers.data
-
-            # instantiate list of teachers
-            teachers = []
-
-            # add teachers to list
-            for teacher in teachers_by_id:
-                teachers.append(Teacher.query.filter_by(id=teacher).first())
-
-            # create log
-            log = Log(
-                body=form.body.data,
-                next=form.next.data,
-                coach_id=curr_coach.id,
-                completed=form.completed.data,
-                time=form.time.data)
-
-            # connect teachers to log
-            for teacher in teachers:
-                teacher_log = LogTeacherLink(
-                    log=log,
-                    teacher=teacher)
-                db.session.add(teacher_log)
-
-            # add tags
-            for tag_id in form.tags.data:
-                tag = Tag.query.filter_by(id=tag_id).first()
-                log_tag = LogTagLink(
-                    log=log,
-                    tag=tag)
-                db.session.add(log_tag)
-
-            db.session.add(log)
-            db.session.commit()
+            if (form.completed.data == True):
+                create_log(current_user, form, timestamp_completed=datetime.utcnow())
+            else:
+                create_log(current_user, 
+                    form, 
+                    complete=False)
             flash("Successfully added log!")
             return redirect(url_for('private.coach_log'))
-
         return render_template('private/coach/log.html', form=form)
 
 
@@ -241,6 +257,79 @@ def add_tags_to_log(tags_by_id, log):
     return True
 
 
+def update_teachers_on_log(form, log):
+    # get list of teachers by id from form
+    teachers_by_id = form.teachers.data
+
+    # instantiate list of teachers
+    teachers = []
+
+    # add teachers to list
+    for teacher in teachers_by_id:
+        teachers.append(Teacher.query.filter_by(id=teacher).first())
+
+    teachers.sort()
+    log.teachers.sort()
+    # check if form teachers != log.teachers
+    if (teachers != log.teachers):
+        # disconnect old teachers from log
+        remove_teachers_from_log(teachers, log)
+
+        # add new teachers
+        add_teachers_to_log(teachers_by_id, log)
+
+
+def update_tags_on_log(form, log):
+    # get list of tags by id from form
+    tags_by_id = form.tags.data
+
+    # instantiae list of tags
+    tags = []
+
+    # add tags to list
+    for tag in tags_by_id:
+        tags.append(Tag.query.filter_by(id=tag).first())
+
+    tags.sort()
+    log.tags.sort()
+    # check if form tags != log.tags
+    if (tags != log.tags):
+
+        # disconnect old tags from log
+        remove_tags_from_log(log.tags, log)
+
+        # add new tags
+        add_tags_to_log(tags_by_id, log)
+
+
+def update_log(log, form, current_user):
+    # store old log data
+    old_log = log
+
+    # get current coach
+    curr_coach = current_user
+
+    # update log
+    log.body = form.body.data
+    log.next = form.next.data
+    log.completed = form.completed.data
+    log.time = form.time.data
+
+    # update teachers
+    update_teachers_on_log(form, log)
+
+    # update tags
+    update_tags_on_log(form, log)
+
+
+def delete_timestamp_from_log(log):
+    log.timestamp_completed = None
+
+
+def add_completed_timestamp(log, form):
+    log.timestamp_completed = datetime.utcnow()
+
+
 @private.route('/coach/edit-log/<log_id>', methods=['GET', 'POST'])
 @login_required
 def coach_edits_log(log_id):
@@ -257,57 +346,17 @@ def coach_edits_log(log_id):
         teachers=teacher_ids,
         tags=tag_ids)
     if form.validate_on_submit():
-
-        # get current coach
-        # curr_coach = current_user
-
-        # update log
-        log.body = form.body.data
-        log.next = form.next.data
-        log.completed = form.completed.data
-        log.time = form.time.data
-
-        # get list of teachers by id from form
-        teachers_by_id = form.teachers.data
-
-        # instantiate list of teachers
-        teachers = []
-
-        # add teachers to list
-        for teacher in teachers_by_id:
-            teachers.append(Teacher.query.filter_by(id=teacher).first())
-
-        teachers.sort()
-        log.teachers.sort()
-        # check if form teachers != log.teachers
-        if (teachers != log.teachers):
-            # disconnect old teachers from log
-            remove_teachers_from_log(teachers, log)
-
-            # add new teachers
-            add_teachers_to_log(teachers_by_id, log)
-
-        # get list of tags by id from form
-        tags_by_id = form.tags.data
-
-        # instantiae list of tags
-        tags = []
-
-        # add tags to list
-        for tag in tags_by_id:
-            tags.append(Tag.query.filter_by(id=tag).first())
-
-        tags.sort()
-        log.tags.sort()
-        # check if form tags != log.tags
-        if (tags != log.tags):
-
-            # disconnect old tags from log
-            remove_tags_from_log(log.tags, log)
-
-            # add new tags
-            add_tags_to_log(tags_by_id, log)
-
+        # if log is changed from incomplete to complete
+        if (log.completed == False and form.completed.data == True):
+            update_log(log, form, current_user)
+            add_completed_timestamp(log, form)
+        # if form is incomplete
+        if (form.completed.data == False):
+            update_log(log, form, current_user)
+            delete_timestamp_from_log(log)
+        # if form stays complete
+        else:
+            update_log(log, form, current_user)
         db.session.add(log)
         db.session.commit()
         flash("Successfully updated log!")

@@ -132,6 +132,8 @@ class Log(db.Model):
     body = db.Column(db.Text)
     next = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    timestamp_created = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    timestamp_completed = db.Column(db.DateTime)
     # logs have many teachers
     teachers = db.relationship(
         'Teacher',
@@ -226,3 +228,14 @@ def add_coaches_to_ial():
     for coach in coaches:
         coach.school_id = school.id
         db.session.commit()
+
+
+def update_log_times():
+    logs = Log.query.all()
+    for log in logs:
+        log.timestamp_created = log.timestamp
+        if (log.time != None):
+            log.timestamp_completed = log.timestamp + datetime.timedelta(minutes = log.time)
+        elif (log.completed == True):
+            log.timestamp_completed = log.timestamp
+

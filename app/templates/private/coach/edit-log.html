@@ -14,7 +14,8 @@
       <thead>
         <tr>
           <th>Teacher</th>
-          <th>Date / Time</th>
+          <th>Date / Time Created</th>
+          <th>Date / Time Completed</th>
           <th>What you did</th>
           <th>What you're doing next</th>
           <th>Minutes logged</th>
@@ -28,7 +29,12 @@
                 {{ teacher.first_name }} {{ teacher.last_name }},
               {% endfor %}
           </td>
-          <td>{{ log.timestamp.strftime("%Y-%m-%d %H:%M") }}</td>
+          <td>{{ log.timestamp_created.strftime("%Y-%m-%d %H:%M") }}</td>
+          <td>
+            {% if log.timestamp_completed != None %}
+                {{ log.timestamp_completed.strftime("%Y-%m-%d %H:%M") }}
+            {% endif %}
+          </td>
           <td id="log-body">{{ log.body }}</td>
           <td>{{ log.next }}</td>
           <th> {{ log.time }}</td>

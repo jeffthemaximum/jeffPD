@@ -54,7 +54,7 @@ def pd_five():
     return render_template('/pd_content/2015_10_10_convert_files.html')
 
 
-main.route('/pd_content/open_shared_files')
+@main.route('/pd_content/open_shared_files')
 def pd_six():
     if current_user.is_authenticated() is not True:
             flash("Unlock super cool extras features by logging in or registering. You can do this by clicking 'Login' in the header!")

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}JeffPD{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Hello, {% if current_user.is_authenticated() %}{{ current_user.first_name }}{% else %}Stranger{% endif %}!</h1>
+    <h2>Open and Save Shared Files in Google Drive</h2>
+</div>
+<div class='container'>
+
+    <h4>By the end of this PD, you will:</h4>
+    <ul>
+        <li>Know how find, open and save shared Google Docs, Sheets, and Slides.</li>
+        <li>Know how to open and save shared Google folders.</li>
+    </ul>
+    <br>
+
+    <h4>How find, open and save shared Google Docs, Sheets, and Slides</h4>
+    <p>Hey {% if current_user.is_authenticated() %}{{ current_user.first_name }}{% else %}Stranger{% endif %}.</p>
+    <p>A lot of teachers and administrators at school have shared some great resources with you this year. For example, Vicky shared <a href="https://docs.google.com/spreadsheets/d/1ZV3m5CMFo0buwP-nDG5-gztYb5f2cRAEMtCNgT7CL9Y/edit#gid=1844616570" target="_blank">this Google Sheet with a list of all the students who are in enrichment</a>.</p>
+    <p>It can be a little tricky to find, open, and save these shared files so that you can access them later. Watch my quick video tutorial to learn how to do these things:</p>
+
+    <div id="iframe">
+        <iframe width="420" height="315" src="https://www.youtube.com/embed/aEluODSnNhc" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <br>
+
+    <h4>How to open and save shared Google folders.</h4>
+    <p>Opening and saving a shared Google folder to your Google drive is slightly different than saving a Google Doc. Watch this video to see how to save a shared Google folder to your Google drive.
+
+    <div id="iframe">
+        <iframe width="420" height="315" src="https://www.youtube.com/embed/1ELb0KeRmDE" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <br>
+    <h4>Did I just make your day? Ruin it? Let me know! <a href="mailto:frey.maxim@gmail.com">Jeff Maxim</a> <h4>
+</div>
+{% endblock %}

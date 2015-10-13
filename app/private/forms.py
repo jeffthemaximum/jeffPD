@@ -101,10 +101,16 @@ class AdministratorSelectsCoachesForm(Form):
         "Which coach\'s logs do you wanna see?",
         coerce=int,
         validators=[Required()])
+    completed = SelectField(
+        u'Search by complete. Leave blank to view all logs.',
+        choices=[(0, ''), (1, 'Done'), (2, 'In Progress')],
+        coerce=int,
+        default=(0, ''))
     tags = SelectField(
         'Search by Tag. Leave blank to view all logs.',
         coerce=int,
         default=(0, ''))
+
     submit = SubmitField('Submit')
 
     def __init__(self, *args, **kwargs):

@@ -495,25 +495,25 @@ def adminstrator_selects_coaches():
         return redirect(url_for(
             'private.administrator_views_coach_logs',
             coach_id=form.coach.data,
-            tag=form.tags.data))
+            tag=form.tags.data,
+            completed=form.completed.data))
     return render_template(
         'private/administrator/select-coaches.html',
         form=form)
 
 
-@private.route('/administrator/coach-logs/<coach_id>/<tag>')
+@private.route('/administrator/coach-logs/<coach_id>/<tag>/<completed>')
 @login_required
-def administrator_views_coach_logs(coach_id, tag):
-    pass
-    # if current_user.type != 'administrator':
-    #     return redirect(url_for('main.pd_list'))
-    # # query db for coach
-    # coach = Coach.query.filter_by(id=coach_id).first()
-    # logs = search_coach_logs_by_tag(coach_id, tag)
-    # return render_template(
-    #     'private/administrator/coach-logs.html',
-    #     coach=coach,
-    #     logs=logs)
+def administrator_views_coach_logs(coach_id, tag, completed):
+    if current_user.type != 'administrator':
+        return redirect(url_for('main.pd_list'))
+    # query db for coach
+    coach = Coach.query.filter_by(id=coach_id).first()
+    logs = search_coach_logs(coach.id, tag, completed)
+    return render_template(
+        'private/administrator/coach-logs.html',
+        coach=coach,
+        logs=logs)
 
 
 @private.route('/administrator/select-teachers', methods=['GET', 'POST'])

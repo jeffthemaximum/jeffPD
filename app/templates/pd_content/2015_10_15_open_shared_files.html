@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}JeffPD{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Hello, {% if current_user.is_authenticated() %}{{ current_user.first_name }}{% else %}Stranger{% endif %}!</h1>
+    <h2>Open and Save Shared Files in Google Drive</h2>
+</div>
+<div class='container'>
+
+    <h4>By the end of this PD, you will:</h4>
+    <ul>
+        <li>Know how find, open and save shared Google Docs, Sheets, and Slides.</li>
+        <li>Know how to open and save shared Google folders.</li>
+    </ul>
+    <br>
+
+    <h4>How find, open and save shared Google Docs, Sheets, and Slides</h4>
+    <p>Hey {% if current_user.is_authenticated() %}{{ current_user.first_name }}{% else %}Stranger{% endif %}.</p>
+    <p>A lot of teachers and administrators at school have shared some great resources with you this year. For example, Vicky shared <a href="https://docs.google.com/spreadsheets/d/1ZV3m5CMFo0buwP-nDG5-gztYb5f2cRAEMtCNgT7CL9Y/edit#gid=1844616570" target="_blank">this Google Sheet with a list of all the students who are in enrichment</a>. </p>
+    <p>For the purposes of keeping this tutorial brief, we'll only talk about how to convert a Microsoft Word document into a Goodle Doc. But, the process I'll show you is the same whether you're working with a document, spreadsheet, or presentation.</p>
+    <p>Checkout my video below to learn how to upload a Google Doc into Google Drive.</p>
+
+    <div id="iframe">
+        <iframe width="420" height="315" src="https://www.youtube.com/embed/7v1dptEsIhE" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <br>
+
+    <h4>How to maintain your formatting when uploading files to Drive.</h4>
+    <p>If you've ever had trouble with formatting when uploading a file from Microsoft Office, then this is the tutorial for you!</p>
+    <p>Watch the following video to learn more about how to maintain your correct document formatting when uploading a Microsoft Office document into Google Drive.</p>
+    <p>This video will also show you how to properly convert a Word document (or any Office file) into a Google Doc.</p>
+
+    <div id="iframe">
+        <iframe width="420" height="315" src="https://www.youtube.com/embed/Id6GG1-zFg8" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <br>
+    <h4>Did I just make your day? Ruin it? Let me know! <a href="mailto:frey.maxim@gmail.com">Jeff Maxim</a> <h4>
+</div>
+{% endblock %}

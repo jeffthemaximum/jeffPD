@@ -59,3 +59,10 @@ def pd_six():
     if current_user.is_authenticated() is not True:
             flash("Unlock super cool extras features by logging in or registering. You can do this by clicking 'Login' in the header!")
     return render_template('/pd_content/2015_10_13_open_shared_files.html')
+
+
+@main.route('/pd_content/skedula-grades')
+def pd_seven():
+    if current_user.is_authenticated() is not True:
+            flash("Unlock super cool extras features by logging in or registering. You can do this by clicking 'Login' in the header!")
+    return render_template('/pd_content/2015_11_19_standards_based_grades_in_skedula.html')

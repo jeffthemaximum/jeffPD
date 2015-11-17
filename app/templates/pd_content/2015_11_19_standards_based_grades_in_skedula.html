@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}JeffPD{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Hello, {% if current_user.is_authenticated() %}{{ current_user.first_name }}{% else %}Stranger{% endif %}!</h1>
+    <h2>Enter standards-based grades in Skedula</h2>
+</div>
+<div class='container'>
+
+    <h4>By the end of this PD, you will:</h4>
+    <ul>
+        <li>Know how to enter standards-based grades in Skedula.</li>
+    </ul>
+    <br>
+
+    <h4>How to enter standards-based grades in Skedula</h4>
+    <p>Hey {% if current_user.is_authenticated() %}{{ current_user.first_name }}{% else %}Stranger{% endif %}.</p>
+    <p>Skedula is pretty easy to use, but it does take a little getting used to. Luckily, we have Jose Grullon here at IAL who's a Skedula master. A Skedula ninja. It Skedula was hogwarts, he'd be Albus Dumbledore. He's helped teach me a lot about Skedula, and I'm passing his knowledge along to you now.</p>
+    <p>Entering standards-based grades in Skedula is a little confusing at first, but it's really easy once you check out the following video. It's only 90 seconds, and it will answer all your questions about how to enter standards-based grades on Skedula. Check it out!</p>
+
+    <div id="iframe">
+        <iframe width="420" height="315" src="https://www.youtube.com/embed/LaAA5qw_AGA" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <br>
+    <h4>Did I just make your day? Ruin it? Let me know! <a href="mailto:frey.maxim@gmail.com">Jeff Maxim</a></h4>
+    <div class="container" id="gif">
+        <img src="{{ url_for('static', filename='img/glee.gif') }}">
+        <p>*Here's a bonus lol for anyone who reads to the end :)</p>
+    </div>
+</div>
+{% endblock %}
